@@ -58,6 +58,4 @@ DocEase is a **patient-centric appointment management system** designed to strea
 - **Security:** JWT Authentication & Role-Based Access Control  
 - **Messaging & Notifications:** Kafka  
 
-This refined version incorporates **all required features** while keeping the system **secure, scalable, and efficient for local use** without cloud hosting. 🚀 Let me know if you'd like further refinements or enhancements! 🔥  
-
 
