@@ -1,10 +1,11 @@
+
 ### **DocEase**  
 **Doctor's Appointment Management System**  
 
 #### **Project Overview:**  
 DocEase is a **patient-centric appointment management system** designed to streamline interactions between doctors and patients. Built with **Java SpringBoot** for backend processing and **React** for a smooth user experience, the system ensures efficient **appointment scheduling, secure data management, and seamless communication** while working **locally without cloud hosting** for now.  
 
----
+
 
 ### **Key Functionalities & Features**  
 
@@ -34,22 +35,31 @@ DocEase is a **patient-centric appointment management system** designed to strea
 - **Availability-Based Filtering** – Shows doctors with open appointment slots.  
 - **Quick Access to Contact Information** – Patients can view office addresses & consultation details.  
 
-#### **6. Secure Messaging & Patient-Doctor Communication**  
+#### **6. Secure Chat for Minor Queries & Follow-Ups**  
 - **Real-Time Messaging** – Patients can ask minor follow-up questions post-consultation.  
 - **Notification System** – Updates on appointment confirmations, prescription changes, and alerts.  
 - **Admin Moderation** – Ensures patient-doctor interactions remain professional and focused.  
 
-#### **7. Analytics & Reports for Doctors & Admins**  
+#### **7. AI-Powered Symptom Checker**  
+- **Smart Recommendation System** – Patients can enter symptoms and receive suggestions for the right specialist.  
+- **Personalized Healthcare Guidance** – Helps users decide when to seek medical attention.   
+
+#### **8. Health Tips & Seasonal Care Alerts**  
+- **Personalized Health Notifications** – Patients receive curated health tips based on medical history.  
+- **Seasonal Care Alerts** – Updates about flu seasons, allergy warnings, and preventive healthcare measures.  
+- **Doctor-Recommended Wellness Advice** – Periodic wellness insights from specialists.  
+
+#### **9. Analytics & Reports for Doctors & Admins**  
 - **Doctor’s Dashboard** – Shows consultation volume, patient visit trends, and appointment statistics.  
 - **Appointment Insights** – Admins can analyze booking trends to optimize availability.  
 - **Payment Analytics** – Doctors can track income and billing history with real-time stats.  
 
-#### **8. Admin Controls & System Security**  
+#### **10. Admin Controls & System Security**  
 - **JWT-Based Authentication** – Secure login for all users with role-based permissions.  
 - **Multi-Factor Authentication (MFA) Support** – Adds extra layers of security for sensitive actions.  
 - **Audit Logging & Compliance** – Tracks system interactions for transparency and security.  
 
----
+
 
 ### **Tech Stack**  
 - **Frontend:** React  
