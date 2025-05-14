@@ -1,0 +1,17 @@
+package com.example.docease.repositories;
+
+import com.example.docease.entities.Appointment;
+import com.example.docease.entities.Doctor;
+import com.example.docease.entities.Patient;
+import com.example.docease.entities.Role;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface AppointmentRepository extends JpaRepository <Appointment, Long>{
+    List<Appointment> findByDoctor(Doctor doctor);
+    List<Appointment> findByPatient(Patient patient);
+
+}
