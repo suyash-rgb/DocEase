@@ -1,4 +1,4 @@
-package com.example.docease.auth;
+package com.example.docease.util;
 
 import java.security.SecureRandom;
 
