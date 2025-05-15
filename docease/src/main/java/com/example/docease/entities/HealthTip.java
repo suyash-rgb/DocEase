@@ -9,7 +9,7 @@ import java.sql.Date;
 public class HealthTip {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long tipId;
+    private Integer tipId;
 
     private String title;
     private String message;

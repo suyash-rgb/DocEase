@@ -10,7 +10,7 @@ import java.sql.Date;
 public class Invoice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long invoiceId;
+    private Integer invoiceId;
 
     @ManyToOne
     @JoinColumn(name = "appointment_id", nullable = false)

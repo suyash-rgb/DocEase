@@ -9,7 +9,7 @@ import java.sql.Date;
 public class AuditLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long logId;
+    private Integer logId;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

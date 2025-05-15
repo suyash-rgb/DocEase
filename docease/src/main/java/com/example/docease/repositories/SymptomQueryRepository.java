@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface SymptomQueryRepository extends JpaRepository<SymptomQuery, Long> {
+public interface SymptomQueryRepository extends JpaRepository<SymptomQuery, Integer> {
     List<SymptomQuery> findByPatient(Patient patient);
 
 }

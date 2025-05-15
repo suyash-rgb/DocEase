@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 public class Doctor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long doctorId;
+    private Integer doctorId;
 
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)

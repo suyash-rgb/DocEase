@@ -9,7 +9,7 @@ import java.sql.Date;
 public class SymptomQuery {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long queryId;
+    private Integer queryId;
 
     @ManyToOne
     @JoinColumn(name = "patient_id", nullable = false)

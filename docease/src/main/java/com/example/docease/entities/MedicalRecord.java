@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 public class MedicalRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long recordId;
+    private Integer recordId;
 
     @ManyToOne
     @JoinColumn(name = "patient_id", nullable = false)

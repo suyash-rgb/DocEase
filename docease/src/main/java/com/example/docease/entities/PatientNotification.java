@@ -9,7 +9,7 @@ import java.sql.Date;
 public class PatientNotification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long notificationId;
+    private Integer notificationId;
 
     @ManyToOne
     @JoinColumn(name = "patient_id", nullable = false)

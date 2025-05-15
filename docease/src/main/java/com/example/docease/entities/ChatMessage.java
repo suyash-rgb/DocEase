@@ -9,7 +9,7 @@ import java.sql.Date;
 public class ChatMessage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long messageId;
+    private Integer messageId;
 
     @ManyToOne
     @JoinColumn(name = "sender_id", nullable = false)

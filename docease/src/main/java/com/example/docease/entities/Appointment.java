@@ -9,7 +9,7 @@ import java.sql.Date;
 public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long appointmentId;
+    private Integer appointmentId;
 
     @ManyToOne
     @JoinColumn(name = "patient_id", nullable = false)

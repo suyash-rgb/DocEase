@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface AppointmentRepository extends JpaRepository <Appointment, Long>{
+public interface AppointmentRepository extends JpaRepository <Appointment, Integer>{
     List<Appointment> findByDoctor(Doctor doctor);
     List<Appointment> findByPatient(Patient patient);
 

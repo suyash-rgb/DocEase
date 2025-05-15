@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
+public interface InvoiceRepository extends JpaRepository<Invoice, Integer> {
     List<Invoice> findByPatient(Patient patient);
     List<Invoice> findByDoctor(Doctor doctor);
     List<Invoice> findByPaymentStatus(String paymentStatus);

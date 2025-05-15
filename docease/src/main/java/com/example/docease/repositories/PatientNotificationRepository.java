@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface PatientNotificationRepository extends JpaRepository<PatientNotification, Long> {
+public interface PatientNotificationRepository extends JpaRepository<PatientNotification, Integer> {
 
     List<PatientNotification> findByPatient(Patient patient);
 
