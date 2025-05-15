@@ -3,6 +3,7 @@ package com.example.docease.entities;
 import jakarta.persistence.*;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "appointments")
@@ -19,6 +20,6 @@ public class Appointment {
     @JoinColumn(name = "doctor_id", nullable = false)
     private Doctor doctor;
 
-    private Date appointmentDate;
+    private LocalDateTime appointmentDate;
     private String status;
 }

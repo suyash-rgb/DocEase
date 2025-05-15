@@ -3,6 +3,7 @@ package com.example.docease.entities;
 import jakarta.persistence.*;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "symptom_queries")
@@ -18,5 +19,5 @@ public class SymptomQuery {
     private String symptoms;
     private String recommendedSpecialist;
     private String guidance;
-    private Date queryDate;
+    private LocalDateTime queryDate;
 }

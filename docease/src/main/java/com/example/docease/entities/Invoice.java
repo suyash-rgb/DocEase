@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "invoices")
@@ -26,5 +27,5 @@ public class Invoice {
 
     private BigDecimal amount;
     private String paymentStatus;
-    private Date invoiceDate;
+    private LocalDateTime invoiceDate;
 }

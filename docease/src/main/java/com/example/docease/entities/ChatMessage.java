@@ -3,6 +3,7 @@ package com.example.docease.entities;
 import jakarta.persistence.*;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "chat_messages")
@@ -20,5 +21,5 @@ public class ChatMessage {
     private User receiver;
 
     private String message;
-    private Date sentAt;
+    private LocalDateTime sentAt;
 }

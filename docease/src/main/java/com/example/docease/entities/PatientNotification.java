@@ -3,6 +3,7 @@ package com.example.docease.entities;
 import jakarta.persistence.*;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "patient_notifications")
@@ -21,5 +22,5 @@ public class PatientNotification {
 
     private String message;
     private Boolean isRead;
-    private Date createdAt;
+    private LocalDateTime createdAt;
 }

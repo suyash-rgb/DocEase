@@ -3,6 +3,7 @@ package com.example.docease.entities;
 import jakarta.persistence.*;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "audit_logs")
@@ -17,5 +18,5 @@ public class AuditLog {
 
     private String action;
     private String details;
-    private Date logDate;
+    private LocalDateTime logDate;
 }
