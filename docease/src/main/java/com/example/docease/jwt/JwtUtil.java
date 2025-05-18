@@ -3,14 +3,15 @@ package com.example.docease.jwt;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
-import java.util.Date;
-import java.util.Map;
+import jakarta.annotation.PostConstruct;
 import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
+import java.util.Date;
 
+@Component
 public class JwtUtil {
-
-    private static final SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     @Value("${jwt.secret}")
     private String jwtSecret;
@@ -18,17 +19,24 @@ public class JwtUtil {
     @Value("${jwt.expirationMs}")
     private int jwtExpirationMs;
 
-    public static String generateToken(String username, String role) {
+    private SecretKey key;
+
+    @PostConstruct
+    public void init() {
+        key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
+    }
+
+    public String generateToken(String username, String role) {
         return Jwts.builder()
                 .setSubject(username)
                 .claim("role", role)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1 hour validity
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
                 .signWith(key)
                 .compact();
     }
 
-    public static Claims extractClaims(String token) {
+    public Claims extractClaims(String token) {
         return Jwts.parser()
                 .setSigningKey(key)
                 .build()

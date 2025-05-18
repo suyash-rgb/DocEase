@@ -1,18 +1,33 @@
 package com.example.docease.controllers;
 
+import com.example.docease.entities.User;
+import com.example.docease.jwt.JwtUtil;
+import com.example.docease.repositories.UserRepository;
 import com.example.docease.services.OtpService;
 import com.example.docease.util.OtpGenerator;
 import com.example.docease.services.EmailService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
 public class OtpController {
 
-    private final EmailService emailService;
-    private final OtpService otpService;
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private OtpService otpService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public OtpController(EmailService emailService, OtpService otpService) {
         this.emailService = emailService;
@@ -30,8 +45,13 @@ public class OtpController {
     @PostMapping("/verify-otp")
     public ResponseEntity<?> verifyOtp(@RequestParam String email, @RequestParam String otp) {
         if (otpService.validateOtp(email, otp)) {
-            otpService.invalidateOtp(email);
-            return ResponseEntity.ok("OTP verification successful!");
+
+            // Find user and generate JWT token
+            User user = userRepository.findByEmail(email).orElse(null);
+            if (user == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+
+            String token = jwtUtil.generateToken(user.getUsername(), user.getRole().getName());
+            return ResponseEntity.ok(Map.of("token", token));
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired OTP.");
         }

@@ -141,3 +141,4 @@ CREATE TABLE audit_logs (
     log_date DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
+

@@ -12,8 +12,12 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(csrf -> csrf.disable())  // Disable CSRF for testing
-                .authorizeHttpRequests(auth -> auth.
-                        requestMatchers("/api/kafka/**").permitAll() // Allow Kafka API access
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/kafka/**").permitAll()
+                        .requestMatchers("/api/health-tips/**").permitAll()
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/doctor/**").hasRole("DOCTOR")
+                        .requestMatchers("/api/patient/**").hasRole("PATIENT")
                         .anyRequest().authenticated())
                 .build();
     }

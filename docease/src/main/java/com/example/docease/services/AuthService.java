@@ -17,17 +17,19 @@ public class AuthService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
     private EmailService emailService;  // Sends OTP
+
+    @Autowired
     private OtpService otpService;  // Stores & validates OTP
 
-    public AuthService(UserRepository userRepository, EmailService emailService, OtpService otpService) {
-        this.userRepository = userRepository;
-        this.emailService = emailService;
-        this.otpService = otpService;
-    }
+    @Autowired
+    private JwtUtil jwtUtil;
+
 
     public ResponseEntity<?> authenticateWithMFA(LoginRequest loginRequest, String role) {
-        User user = userRepository.findByUsernameAndRole(loginRequest.getUsername(), role).orElse(null);
+        User user = userRepository.findByUsernameAndRole_Name(loginRequest.getUsername(), role).orElse(null);
         if (user == null || !user.getPasswordHash().equals(loginRequest.getPassword())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
@@ -38,19 +40,20 @@ public class AuthService {
             emailService.sendOtp(user.getEmail(), otp);
         } catch (MessagingException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to send OTP. Please try again.");
-        } catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: "+e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
         }
 
         return ResponseEntity.ok("OTP sent to email. Please verify.");
     }
+
     public ResponseEntity<?> authenticateWithoutMFA(LoginRequest loginRequest) {
-        User user = userRepository.findByUsernameAndRole(loginRequest.getUsername(), "PATIENT").orElse(null);
+        User user = userRepository.findByUsernameAndRole_Name(loginRequest.getUsername(), "PATIENT").orElse(null);
         if (user == null || !user.getPasswordHash().equals(loginRequest.getPassword())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
 
-        String token = JwtUtil.generateToken(user.getUsername(), "PATIENT");
+        String token = jwtUtil.generateToken(user.getUsername(), "PATIENT");
         return ResponseEntity.ok(Map.of("token", token));
     }
 }
