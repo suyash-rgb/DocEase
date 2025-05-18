@@ -20,4 +20,84 @@ public class Doctor {
     private BigDecimal consultationFee;
     private String profileDescription;
     private String phone;
+
+    private String imageUrl;
+
+    public Doctor() {
+    }
+
+    public Doctor(Integer doctorId, User user, String specialization, String availability, BigDecimal consultationFee, String profileDescription, String phone, String imageUrl) {
+        this.doctorId = doctorId;
+        this.user = user;
+        this.specialization = specialization;
+        this.availability = availability;
+        this.consultationFee = consultationFee;
+        this.profileDescription = profileDescription;
+        this.phone = phone;
+        this.imageUrl = imageUrl;
+    }
+
+    public Integer getDoctorId() {
+        return doctorId;
+    }
+
+    public void setDoctorId(Integer doctorId) {
+        this.doctorId = doctorId;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String getSpecialization() {
+        return specialization;
+    }
+
+    public void setSpecialization(String specialization) {
+        this.specialization = specialization;
+    }
+
+    public String getAvailability() {
+        return availability;
+    }
+
+    public void setAvailability(String availability) {
+        this.availability = availability;
+    }
+
+    public BigDecimal getConsultationFee() {
+        return consultationFee;
+    }
+
+    public void setConsultationFee(BigDecimal consultationFee) {
+        this.consultationFee = consultationFee;
+    }
+
+    public String getProfileDescription() {
+        return profileDescription;
+    }
+
+    public void setProfileDescription(String profileDescription) {
+        this.profileDescription = profileDescription;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 }

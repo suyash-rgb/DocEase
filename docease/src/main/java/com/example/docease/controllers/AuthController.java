@@ -1,7 +1,9 @@
 package com.example.docease.controllers;
 
+import com.example.docease.DTOs.DoctorRegistrationDTO;
 import com.example.docease.DTOs.LoginRequest;
 import com.example.docease.services.AuthService;
+import com.example.docease.services.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -16,9 +18,17 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
+    @Autowired
+    private DoctorService doctorService;
+
     @PostMapping("/login/admin")
     public ResponseEntity<?> loginAdmin(@RequestBody LoginRequest loginRequest) {
         return authService.authenticateWithMFA(loginRequest, "ADMIN");
+    }
+
+    @PostMapping("/register-doctor")
+    public ResponseEntity<?> registerDoctor(@RequestBody DoctorRegistrationDTO doctorDTO) {
+        return doctorService.registerDoctor(doctorDTO);
     }
 
     @PostMapping("/login/doctor")
