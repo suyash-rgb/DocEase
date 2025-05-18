@@ -23,10 +23,12 @@ public class Doctor {
 
     private String imageUrl;
 
+    private String medicalLicense;
+
     public Doctor() {
     }
 
-    public Doctor(Integer doctorId, User user, String specialization, String availability, BigDecimal consultationFee, String profileDescription, String phone, String imageUrl) {
+    public Doctor(Integer doctorId, User user, String specialization, String availability, BigDecimal consultationFee, String profileDescription, String phone, String imageUrl, String medicalLicense) {
         this.doctorId = doctorId;
         this.user = user;
         this.specialization = specialization;
@@ -35,6 +37,7 @@ public class Doctor {
         this.profileDescription = profileDescription;
         this.phone = phone;
         this.imageUrl = imageUrl;
+        this.medicalLicense = medicalLicense;
     }
 
     public Integer getDoctorId() {
@@ -99,5 +102,13 @@ public class Doctor {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public String getMedicalLicense() {
+        return medicalLicense;
+    }
+
+    public void setMedicalLicense(String medicalLicense) {
+        this.medicalLicense = medicalLicense;
     }
 }

@@ -21,6 +21,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())  // Disable CSRF for testing
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/kafka/**").permitAll()
+                        .requestMatchers(("/api/auth/**")).permitAll()
                         .requestMatchers("/api/health-tips/**").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/doctor/**").hasRole("DOCTOR")

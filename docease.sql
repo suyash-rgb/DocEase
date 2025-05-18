@@ -142,3 +142,10 @@ CREATE TABLE audit_logs (
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
+ALTER TABLE doctors ADD COLUMN image_url VARCHAR(255);
+
+SELECT * FROM roles;
+
+INSERT INTO roles (name) VALUES ('ADMIN');
+INSERT INTO roles (name) VALUES ('DOCTOR');
+INSERT INTO roles (name) VALUES ('PATIENT');

@@ -12,6 +12,8 @@ public class DoctorRegistrationDTO {
     private BigDecimal consultationFee;
     private String profileDescription;
 
+    private String medicalLicense;
+
     public String getUsername() {
         return username;
     }
@@ -74,5 +76,13 @@ public class DoctorRegistrationDTO {
 
     public void setProfileDescription(String profileDescription) {
         this.profileDescription = profileDescription;
+    }
+
+    public String getMedicalLicense() {
+        return medicalLicense;
+    }
+
+    public void setMedicalLicense(String medicalLicense) {
+        this.medicalLicense = medicalLicense;
     }
 }
