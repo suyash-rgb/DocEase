@@ -23,23 +23,37 @@ public class HealthTipService {
             this.webClient = webClientBuilder.baseUrl(geminiApiUrl).build();
         }
 
-        public String generateHealthTip() {
-            String prompt = "Generate a short, practical health tip.";
+    public String generateHealthTip() {
+        String prompt = "Generate a short, practical health tip.";
 
-            try {
-                String response = webClient.post()
-                        .uri("/generate-tip") // Adjust URI as needed
-                        .header("Authorization", "Bearer " + geminiApiKey)
-                        .bodyValue(Map.of("prompt", prompt))
-                        .retrieve()
-                        .bodyToMono(String.class)
-                        .block();
+        try {
+            Map<String, Object> requestBody = Map.of(
+                    "contents", new Object[]{
+                            Map.of("parts", new Object[]{
+                                    Map.of("text", prompt)
+                            })
+                    }
+            );
 
-                JsonNode jsonResponse = new ObjectMapper().readTree(response);
-                return jsonResponse.get("generatedText").asText();
-            } catch (Exception e) {
-                return e.getMessage();
-            }
+            String response = webClient.post()
+                    .uri(geminiApiUrl + geminiApiKey)  // Correctly appends the full API URL
+                    .header("Content-Type", "application/json")
+                    .bodyValue(requestBody)
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
+
+            JsonNode jsonResponse = new ObjectMapper().readTree(response);
+            return jsonResponse.path("candidates")
+                    .get(0)
+                    .path("content")
+                    .path("parts")
+                    .get(0)
+                    .path("text")
+                    .asText();
+        } catch (Exception e) {
+            return "Error processing request: " + e.getMessage();
         }
+    }
 
 }
