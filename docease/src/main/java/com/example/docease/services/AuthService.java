@@ -56,4 +56,25 @@ public class AuthService {
         String token = jwtUtil.generateToken(user.getUsername(), "PATIENT");
         return ResponseEntity.ok(Map.of("token", token));
     }
+
+    public ResponseEntity<?> initiateForgotPassword(String refreshToken) {
+        if (jwtUtil.validateToken(refreshToken)) {
+            String username = jwtUtil.extractUsername(refreshToken);
+            User user = userRepository.findByUsername(username).orElse(null);
+
+            if (user == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
+            }
+
+            // Generate temporary password reset token
+            String resetToken = jwtUtil.generatePasswordResetToken(username);
+
+            // Send email with reset instructions
+            emailService.sendPasswordResetEmail(user.getEmail(), resetToken);
+
+            return ResponseEntity.ok(Map.of("message", "Password reset link sent to email."));
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid refresh token.");
+        }
+    }
 }

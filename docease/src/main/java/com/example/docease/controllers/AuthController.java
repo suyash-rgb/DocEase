@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.Map;
+
 @Controller
 @RequestMapping("api/auth")
 public class AuthController {
@@ -49,5 +51,11 @@ public class AuthController {
     @PostMapping("/login/patient")
     public ResponseEntity<?> loginPatient(@RequestBody LoginRequest loginRequest) {
         return authService.authenticateWithoutMFA(loginRequest);
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestBody Map<String, String> request) {
+        String refreshToken = request.get("refreshToken");
+        return authService.initiateForgotPassword(refreshToken);
     }
 }

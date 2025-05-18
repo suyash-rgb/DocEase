@@ -149,3 +149,5 @@ SELECT * FROM roles;
 INSERT INTO roles (name) VALUES ('ADMIN');
 INSERT INTO roles (name) VALUES ('DOCTOR');
 INSERT INTO roles (name) VALUES ('PATIENT');
+
+ALTER TABLE doctors ADD COLUMN medical_license VARCHAR(100);
