@@ -1,5 +1,6 @@
 package com.example.docease.services;
 
+import com.example.docease.DTOs.DoctorProfileUpdateDTO;
 import com.example.docease.DTOs.DoctorRegistrationDTO;
 import com.example.docease.entities.Doctor;
 import com.example.docease.entities.Role;
@@ -64,5 +65,36 @@ public class DoctorService {
                 "message", "Doctor registered successfully!",
                 "doctorId", doctor.getDoctorId()
         ));
+    }
+
+    public ResponseEntity<?> updateDoctorProfile(DoctorProfileUpdateDTO updateDTO, String username) {
+        User user = userRepository.findByUsername(username).orElse(null);
+
+        if (user == null || !user.getRole().getName().equals("DOCTOR")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized action.");
+        }
+
+        Doctor doctor = doctorRepository.findByUser(user).orElse(null);
+        if (doctor == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Doctor profile not found.");
+        }
+
+        // ✅ Only update fields that are provided in the request
+        if (updateDTO.getAvailability() != null) {
+            doctor.setAvailability(updateDTO.getAvailability());
+        }
+        if (updateDTO.getConsultationFee() != null) {
+            doctor.setConsultationFee(updateDTO.getConsultationFee());
+        }
+        if (updateDTO.getProfileDescription() != null) {
+            doctor.setProfileDescription(updateDTO.getProfileDescription());
+        }
+        if (updateDTO.getPhone() != null) {
+            doctor.setPhone(updateDTO.getPhone());
+        }
+
+        doctorRepository.save(doctor);
+
+        return ResponseEntity.ok(Map.of("message", "Profile updated successfully!"));
     }
 }
