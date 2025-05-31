@@ -17,19 +17,37 @@ public class JwtUtil {
     private String jwtSecret;
 
     @Value("${jwt.expirationMs}")
-    private int jwtExpirationMs;
+    private String jwtExpirationMsString;
 
     @Value("${jwt.refreshExpirationMs}") // 🔥 Added refresh token expiry
-    private int refreshTokenExpirationMs;
+    private String refreshTokenExpirationMsString;
 
     @Value("${jwt.passwordResetExpirationMs}") // 🔥 Added password reset token expiry
-    private int passwordResetExpirationMs;
+    private String passwordResetExpirationMsString;
+
+    private long jwtExpirationMs;
+    private long refreshTokenExpirationMs;
+    private long passwordResetExpirationMs;
 
     private SecretKey key;
 
     @PostConstruct
     public void init() {
-        key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
+        try{
+            System.out.println("Initializing JwtUtil...");
+
+            key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
+
+            System.out.println("Secret Key Initialized Successfully.");
+            this.jwtExpirationMs = Long.parseLong(jwtExpirationMsString.trim());
+            this.refreshTokenExpirationMs = Long.parseLong(refreshTokenExpirationMsString.trim());
+            this.passwordResetExpirationMs = Long.parseLong(passwordResetExpirationMsString.trim());
+            System.out.println("Token expiration times set successfully.");
+
+        } catch(Exception e){
+            System.err.println("Error initializing JwtUtil: " + e.getMessage());
+            throw new RuntimeException("JwtUtil initialization failed.", e);
+        }
     }
 
     // 🔹 Generate Access Token
