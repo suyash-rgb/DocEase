@@ -3,6 +3,8 @@ package com.example.docease.entities;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "doctors")
@@ -16,7 +18,7 @@ public class Doctor {
     private User user;
 
     private String specialization;
-    private String availability;
+    //private String availability;
     private BigDecimal consultationFee;
     private String profileDescription;
     private String phone;
@@ -25,19 +27,23 @@ public class Doctor {
 
     private String medicalLicense;
 
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DoctorSchedule> schedules = new ArrayList<>();
+
     public Doctor() {
     }
 
-    public Doctor(Integer doctorId, User user, String specialization, String availability, BigDecimal consultationFee, String profileDescription, String phone, String imageUrl, String medicalLicense) {
+    public Doctor(Integer doctorId, User user, String specialization, BigDecimal consultationFee, String profileDescription, String phone, String imageUrl, String medicalLicense, List<DoctorSchedule> schedules) {
         this.doctorId = doctorId;
         this.user = user;
         this.specialization = specialization;
-        this.availability = availability;
+
         this.consultationFee = consultationFee;
         this.profileDescription = profileDescription;
         this.phone = phone;
         this.imageUrl = imageUrl;
         this.medicalLicense = medicalLicense;
+        this.schedules = schedules;
     }
 
     public Integer getDoctorId() {
@@ -62,14 +68,6 @@ public class Doctor {
 
     public void setSpecialization(String specialization) {
         this.specialization = specialization;
-    }
-
-    public String getAvailability() {
-        return availability;
-    }
-
-    public void setAvailability(String availability) {
-        this.availability = availability;
     }
 
     public BigDecimal getConsultationFee() {
@@ -110,5 +108,13 @@ public class Doctor {
 
     public void setMedicalLicense(String medicalLicense) {
         this.medicalLicense = medicalLicense;
+    }
+
+    public List<DoctorSchedule> getSchedules() {
+        return schedules;
+    }
+
+    public void setSchedules(List<DoctorSchedule> schedules) {
+        this.schedules = schedules;
     }
 }
