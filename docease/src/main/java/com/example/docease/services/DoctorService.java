@@ -55,7 +55,7 @@ public class DoctorService {
         Doctor doctor = new Doctor();
         doctor.setUser(user);
         doctor.setSpecialization(doctorDTO.getSpecialization());
-        doctor.setAvailability(doctorDTO.getAvailability());
+        //doctor.setAvailability(doctorDTO.getAvailability());
         doctor.setConsultationFee(doctorDTO.getConsultationFee());
         doctor.setProfileDescription(doctorDTO.getProfileDescription());
 
@@ -79,10 +79,10 @@ public class DoctorService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Doctor profile not found.");
         }
 
-        // ✅ Only update fields that are provided in the request
-        if (updateDTO.getAvailability() != null) {
-            doctor.setAvailability(updateDTO.getAvailability());
-        }
+
+//        if (updateDTO.getAvailability() != null) {
+//            doctor.setAvailability(updateDTO.getAvailability());
+//        }
         if (updateDTO.getConsultationFee() != null) {
             doctor.setConsultationFee(updateDTO.getConsultationFee());
         }

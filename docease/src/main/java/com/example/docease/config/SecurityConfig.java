@@ -23,6 +23,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/kafka/**").permitAll()
                         .requestMatchers(("/api/auth/**")).permitAll()
                         .requestMatchers("/api/health-tips/**").permitAll()
+                        .requestMatchers("/api/symptom-query/**").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/doctor/**").hasRole("DOCTOR")
                         .requestMatchers("/api/patient/**").hasRole("PATIENT")
