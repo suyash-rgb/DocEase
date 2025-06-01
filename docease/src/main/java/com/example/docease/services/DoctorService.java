@@ -61,11 +61,18 @@ public class DoctorService {
         Doctor doctor = new Doctor();
         doctor.setUser(user);
         doctor.setSpecialization(doctorDTO.getSpecialization());
-        //doctor.setAvailability(doctorDTO.getAvailability());
         doctor.setConsultationFee(doctorDTO.getConsultationFee());
         doctor.setProfileDescription(doctorDTO.getProfileDescription());
+        doctor.setMedicalLicense(doctorDTO.getMedicalLicense()); // ✅ Added Medical License Field
 
         doctorRepository.save(doctor);
+
+        // ✅ Store Doctor Schedules (Replacing Availability)
+        List<DoctorSchedule> schedules = doctorDTO.getSchedules().stream()
+                .map(dto -> new DoctorSchedule(doctor, dto.getDayOfWeek(), dto.getStartTime(), dto.getEndTime()))
+                .toList();
+
+        doctorScheduleRepository.saveAll(schedules);
 
         return ResponseEntity.ok(Map.of(
                 "message", "Doctor registered successfully!",

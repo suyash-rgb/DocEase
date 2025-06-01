@@ -1,6 +1,7 @@
 package com.example.docease.DTOs;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public class DoctorRegistrationDTO {
     private String username;
@@ -8,7 +9,7 @@ public class DoctorRegistrationDTO {
     private String email;
     private String phone;
     private String specialization;
-    private String availability;
+    private List<DoctorScheduleDTO> schedules;
     private BigDecimal consultationFee;
     private String profileDescription;
 
@@ -54,13 +55,6 @@ public class DoctorRegistrationDTO {
         this.specialization = specialization;
     }
 
-    public String getAvailability() {
-        return availability;
-    }
-
-    public void setAvailability(String availability) {
-        this.availability = availability;
-    }
 
     public BigDecimal getConsultationFee() {
         return consultationFee;
@@ -76,6 +70,14 @@ public class DoctorRegistrationDTO {
 
     public void setProfileDescription(String profileDescription) {
         this.profileDescription = profileDescription;
+    }
+
+    public List<DoctorScheduleDTO> getSchedules() {
+        return schedules;
+    }
+
+    public void setSchedules(List<DoctorScheduleDTO> schedules) {
+        this.schedules = schedules;
     }
 
     public String getMedicalLicense() {
