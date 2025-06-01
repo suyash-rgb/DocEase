@@ -26,6 +26,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/symptom-query/**").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/doctor/**").hasRole("DOCTOR")
+                        .requestMatchers("/api/doctor-schedule/**").hasRole("DOCTOR")
                         .requestMatchers("/api/patient/**").hasRole("PATIENT")
                         .anyRequest().authenticated())
                 .build();

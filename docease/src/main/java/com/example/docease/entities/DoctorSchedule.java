@@ -22,6 +22,25 @@ public class DoctorSchedule {
 
     private Boolean active = true; // Marks availability
 
+    public DoctorSchedule() {
+    }
+
+    public DoctorSchedule(Doctor doctor, DayOfWeek dayOfWeek, LocalTime startTime, LocalTime endTime) {
+        this.doctor = doctor;
+        this.dayOfWeek = dayOfWeek;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
+
+    public DoctorSchedule(Integer id, Doctor doctor, DayOfWeek dayOfWeek, LocalTime startTime, LocalTime endTime, Boolean active) {
+        this.id = id;
+        this.doctor = doctor;
+        this.dayOfWeek = dayOfWeek;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.active = active;
+    }
+
     public Integer getId() {
         return id;
     }

@@ -34,7 +34,7 @@ public class AuthService {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
 
-        String otp = otpService.generateOtp(user.getEmail());
+        String otp = otpService.generateOtp(user.getEmail());  //generating an OTP
 
         try {
             emailService.sendOtp(user.getEmail(), otp);

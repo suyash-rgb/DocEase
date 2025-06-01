@@ -32,5 +32,4 @@ public class DoctorScheduleDTO {
         this.endTime = endTime;
     }
 
-    // Getters & Setters
 }

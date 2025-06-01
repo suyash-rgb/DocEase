@@ -15,14 +15,14 @@ public class OtpService {
     public String generateOtp(String email) {
         String otp = OtpGenerator.generateOtp();
         otpStorage.put(email, otp);
-        otpExpiry.put(email, System.currentTimeMillis() + (5 * 60 * 1000)); // Expiry in 5 mins
+        otpExpiry.put(email, System.currentTimeMillis() + (10 * 60 * 1000)); // Expiry in 10 mins
         return otp;
     }
 
     public boolean validateOtp(String email, String otp) {
         if (!otpStorage.containsKey(email)) return false;
         if (System.currentTimeMillis() > otpExpiry.get(email)) return false; // Expired OTP
-        return otp.equals(otpStorage.get(email));
+        return otp.equals(otpStorage.get(email)); //boolean result
     }
 
     public void invalidateOtp(String email) {

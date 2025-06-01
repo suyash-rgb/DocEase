@@ -10,4 +10,9 @@ import java.util.List;
 @Repository
 public interface DoctorScheduleRepository extends JpaRepository<DoctorSchedule, Integer> {
     List<DoctorSchedule> findByDoctorAndActiveTrue(Doctor doctor);
+
+    List<DoctorSchedule> findByDoctor(Doctor doctor); // ✅ Retrieves schedules for a doctor
+
+    void deleteByDoctor(Doctor doctor); // ✅ Bulk deletes schedules linked to a doctor
+
 }

@@ -1,20 +1,22 @@
 package com.example.docease.DTOs;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public class DoctorProfileUpdateDTO {
-    private String availability;
+    private List<DoctorScheduleDTO> schedules;
     private BigDecimal consultationFee;
     private String profileDescription;
     private String phone;
 
-    public String getAvailability() {
-        return availability;
+    public List<DoctorScheduleDTO> getSchedules() {
+        return schedules;
     }
 
-    public void setAvailability(String availability) {
-        this.availability = availability;
+    public void setSchedules(List<DoctorScheduleDTO> schedules) {
+        this.schedules = schedules;
     }
+
 
     public BigDecimal getConsultationFee() {
         return consultationFee;
