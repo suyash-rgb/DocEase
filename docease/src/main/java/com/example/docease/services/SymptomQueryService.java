@@ -100,4 +100,13 @@ public class SymptomQueryService {
             return "{\"error\": \"Failed to fetch specialist recommendation\"}";
         }
     }
+
+    //to retrieve past symptom queries and recommendations
+    public ResponseEntity<?> getSymptomQueryHistory(String username) {
+        Patient patient = patientRepository.findByUser_Username(username).orElse(null);
+        if (patient == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Patient not found.");
+
+        List<SymptomQuery> history = symptomQueryRepository.findByPatient(patient);
+        return ResponseEntity.ok(history);
+    }
 }
