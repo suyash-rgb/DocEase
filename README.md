@@ -1,10 +1,9 @@
 
-### **DocEase**  
-**Doctor's Appointment Management System**  
+### **DocEase — Doctor's Appointment Management System (Microservices Architecture)**  
+
 
 #### **Project Overview:**  
-DocEase is a **patient-centric appointment management system** designed to streamline interactions between doctors and patients. Built with **Java SpringBoot** for backend processing and **React** for a smooth user experience, the system ensures efficient **appointment scheduling, secure data management, and seamless communication** while working **locally without cloud hosting** for now.  
-
+DocEase is a **patient-centric appointment management system** designed to streamline interactions between doctors and patients. Built with **Java SpringBoot** for backend processing using **microservices architecture** to improve scalability, maintainability, and the ability to integrate with larger hospitals and third-party systems; and **React** for a smooth user experience, the system ensures efficient **appointment scheduling, secure data management, and seamless communication** while working **locally without cloud hosting** for now.  
 
 
 ### **Key Functionalities & Features**  
@@ -41,7 +40,8 @@ DocEase is a **patient-centric appointment management system** designed to strea
 - **Admin Moderation** – Ensures patient-doctor interactions remain professional and focused.  
 
 #### **7. AI-Powered Symptom Checker**  
-- **Smart Recommendation System** – Patients can enter symptoms and receive suggestions for the right specialist.  
+- **Smart Recommendation System** – Patients can enter symptoms and receive suggestions for the right specialist.
+- **No-show prediction & demand forecasting** - Re-allocating consultation time based on no shows/cancellation and patient's RSVP via email.
 - **Personalized Healthcare Guidance** – Helps users decide when to seek medical attention.   
 
 #### **8. Health Tips & Seasonal Care Alerts**  
@@ -59,7 +59,29 @@ DocEase is a **patient-centric appointment management system** designed to strea
 - **Multi-Factor Authentication (MFA) Support** – Adds extra layers of security for sensitive actions.  
 - **Audit Logging & Compliance** – Tracks system interactions for transparency and security.  
 
+### **API Design & Contracts (high-level)**
 
+/auth/ — login, refresh, user introspect
+
+/users/ — profile, medical history pointers
+
+/providers/ — list providers, availability
+
+/scheduling/ — GET available-slots, POST /book, PATCH /reschedule, POST /cancel
+
+/checkin/ — POST /checkin, GET /queue-status
+
+/notifications/ — template management, audit
+
+/billing/ — create invoice, payment callback
+
+/chat/ — open channel, send message
+
+/ai/symptom-check/ — submit symptoms → suggested specialties
+
+/admin/ — hospital configs, staff
+
+Each microservice should expose an OpenAPI spec. Gateway aggregates routes and enforces auth.
 
 ### **Tech Stack**  
 - **Frontend:** React  
