@@ -83,6 +83,14 @@ DocEase is a **patient-centric appointment management system** designed to strea
 
 Each microservice should expose an OpenAPI spec. Gateway aggregates routes and enforces auth.
 
+### **Notifications & Reminders Flow**
+
+Scheduling Service emits AppointmentCreated to Kafka.
+
+Notification Service consumes and schedules reminders (24h, 2h) and immediate confirmation dispatch.
+
+If patient reschedules, AppointmentRescheduled emitted — Notification Service updates/removes prior reminders.
+
 ### **Tech Stack**  
 - **Frontend:** React  
 - **Backend:** Java SpringBoot  
