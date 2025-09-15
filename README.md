@@ -91,6 +91,29 @@ Notification Service consumes and schedules reminders (24h, 2h) and immediate co
 
 If patient reschedules, AppointmentRescheduled emitted — Notification Service updates/removes prior reminders.
 
+### Sequence Diagrams to include
+
+1. Booking Flow (User → Gateway → Scheduling Service → Payment → Notification)
+
+Shows slot selection, hold, confirm, payment, and notifications.
+
+2. Reschedule / Cancellation Flow
+
+Cancel triggers free slot, waitlist notifications, billing refunds.
+
+3. Check-in & Queue Flow
+
+Receptionist kiosk/check-in → Queue Service → Clinician Dashboard → Notification.
+
+4. Symptom Checker Flow
+
+User submits symptoms → AI Service → Recommendation delivered to frontend.
+
+5. EHR Integration Flow
+
+Scheduling Service ↔ Integration Adapter ↔ Hospital EHR (FHIR/HL7).
+
+
 ### **Tech Stack**  
 - **Frontend:** React  
 - **Backend:** Java SpringBoot  
@@ -98,4 +121,29 @@ If patient reschedules, AppointmentRescheduled emitted — Notification Service 
 - **Security:** JWT Authentication & Role-Based Access Control  
 - **Messaging & Notifications:** Kafka  
 
+
+### **MVP Scope & Phased Roadmap (adapted)**
+
+**MVP (must-have)**
+
+User auth & profiles, doctor profile management
+Scheduling Service + slots + booking + reschedule + cancel
+Notifications (email/SMS) for confirmations & reminders
+Receptionist check-in UI + queue
+Admin dashboard (basic metrics)
+Run locally using Docker Compose / k3s
+
+**Phase 2**
+
+Billing & payments, invoices, offline payments
+Medical records & prescriptions
+Chat & basic telemedicine integration
+EHR read-only sync via FHIR adapter
+
+**Phase 3**
+
+AI symptom checker & no-show prediction
+Advanced analytics, staff rostering suggestions
+Enterprise features (SSO, multi-hospital tenancy)
+High-availability, cross-region deployment
 
