@@ -1,6 +1,26 @@
 
 ### **DocEase — Doctor's Appointment Management System (PaaS with Microservices Architecture)**  
 
+#### **Problem Statement**
+In today’s healthcare ecosystem, patients and doctors often struggle with fragmented and inefficient appointment management systems. Patients face long waiting times, difficulty in finding the right specialist, lack of transparency in doctor availability, and challenges in maintaining medical history across multiple consultations. Simultaneously, doctors and hospitals encounter problems in managing appointment schedules, reducing no-shows, handling medical records securely, and ensuring effective patient communication.
+
+The absence of an integrated, patient-centric, and scalable solution leads to:
+
+- Inefficient scheduling with frequent overlaps, cancellations, or long waiting lists.
+
+- Communication gaps between doctors and patients regarding prescriptions, follow-ups, and minor queries.
+
+- Data fragmentation, as patients’ medical histories, prescriptions, and diagnostic reports are scattered across different clinics or stored in unsecured formats.
+
+- Limited accessibility, making it difficult for patients to search for doctors by specialization, availability, or location.
+
+- Poor resource utilization, with unoptimized doctor schedules and lack of predictive insights for no-shows and appointment demand.
+
+- Security risks in storing sensitive healthcare data without proper authentication and compliance mechanisms.
+
+These challenges not only reduce patient satisfaction and trust in healthcare services but also burden medical practitioners with administrative inefficiencies, limiting the quality of care they can deliver.
+
+DocEase aims to solve these issues by providing a comprehensive appointment management system that streamlines scheduling, secures medical data, improves doctor-patient communication, integrates billing, and leverages AI-powered insights—all within a scalable microservices architecture adaptable to both small clinics and large hospitals.
 
 #### **Project Overview:**  
 DocEase is a **patient-centric appointment management system** designed to streamline interactions between doctors and patients. Built with **Java SpringBoot** for backend processing using **microservices architecture** to improve scalability, maintainability, and the ability to integrate with larger hospitals and third-party systems; and **React** for a smooth user experience, the system ensures efficient **appointment scheduling, secure data management, and seamless communication** while working **locally without cloud hosting** for now.  
