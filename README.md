@@ -1,5 +1,5 @@
 
-### **DocEase — Doctor's Appointment Management System (Microservices Architecture)**  
+### **DocEase — Doctor's Appointment Management System (PaaS with Microservices Architecture)**  
 
 
 #### **Project Overview:**  
