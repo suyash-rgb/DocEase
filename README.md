@@ -6,17 +6,17 @@ In today’s healthcare ecosystem, patients and doctors often struggle with frag
 
 The absence of an integrated, patient-centric, and scalable solution leads to:
 
-- Inefficient scheduling with frequent overlaps, cancellations, or long waiting lists.
+- **Inefficient scheduling** with frequent overlaps, cancellations, or long waiting lists.
 
-- Communication gaps between doctors and patients regarding prescriptions, follow-ups, and minor queries.
+- **Communication gaps** between doctors and patients regarding prescriptions, follow-ups, and minor queries.
 
-- Data fragmentation, as patients’ medical histories, prescriptions, and diagnostic reports are scattered across different clinics or stored in unsecured formats.
+- **Data fragmentation**, as patients’ medical histories, prescriptions, and diagnostic reports are scattered across different clinics or stored in unsecured formats.
 
-- Limited accessibility, making it difficult for patients to search for doctors by specialization, availability, or location.
+- **Limited accessibility**, making it difficult for patients to search for doctors by specialization, availability, or location.
 
-- Poor resource utilization, with unoptimized doctor schedules and lack of predictive insights for no-shows and appointment demand.
+- **Poor resource utilization**, with unoptimized doctor schedules and lack of predictive insights for no-shows and appointment demand.
 
-- Security risks in storing sensitive healthcare data without proper authentication and compliance mechanisms.
+- **Security risks** in storing sensitive healthcare data without proper authentication and compliance mechanisms.
 
 These challenges not only reduce patient satisfaction and trust in healthcare services but also burden medical practitioners with administrative inefficiencies, limiting the quality of care they can deliver.
 
