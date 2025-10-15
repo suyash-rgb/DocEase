@@ -24,7 +24,7 @@ export default function Footer() {
         <div>
           <h3 className="font-semibold mb-2">Support</h3>
           <p>Email: <a href="mailto:support@docease.in" className="underline">support@docease.in</a></p>
-          <p>Phone: +91-98765-43210</p>
+          <p>Phone: +91-7441104130</p>
         </div>
       </div>
 
