@@ -1,12 +1,18 @@
 import './App.css'
+import Navbar from './components/Navbar'
+import Hero from './components/Hero'
+import Features from './components/Features'
+import ChatbotPopup from './components/ChatbotPopup'
+
 
 function App() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-500 to-pink-500">
-      <h1 className="text-5xl font-bold text-white drop-shadow-lg">
-        Tailwind is working 🎉
-      </h1>
-    </div>
+    <>
+      <Navbar />
+      <Hero />
+      <Features />
+      <ChatbotPopup />
+    </>
   );
 }
 
