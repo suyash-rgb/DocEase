@@ -6,7 +6,7 @@ export default function Features() {
         <Feature title="Smart Scheduling" description="Real-time slot booking, rescheduling, and waitlist notifications." />
         <Feature title="Secure Medical Records" description="Upload prescriptions, reports, and treatment notes securely." />
         <Feature title="AI Symptom Checker" description="Get smart recommendations based on symptoms." />
-        <Feature title="Doctor Search & Filters" description="Find specialists by location, availability, and expertise." />
+        <Feature title="Find a Specialist" description="Find specialists by location, availability, and expertise." />
       </div>
     </section>
   );

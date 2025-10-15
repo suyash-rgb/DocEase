@@ -1,7 +1,11 @@
 export default function Navbar() {
   return (
     <nav className="bg-green-600 text-white px-6 py-4 flex justify-between items-center shadow-md">
-      <h1 className="text-xl font-bold">DocEase</h1>
+      <div className="flex items-center gap-3">
+        <img src="/logo_cropped.png" alt="DocEase Logo" className="h-15 w-10" />
+        <h1 className="text-xl font-bold">DocEase</h1>
+      </div>
+
       <ul className="flex gap-6 font-medium">
         <li><a href="#features">Features</a></li>
         <li><a href="#pricing">Pricing</a></li>
