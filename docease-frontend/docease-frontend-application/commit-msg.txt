@@ -1,0 +1,5 @@
+feat: Chatbot UI + AI Integration Enhancements
+- Ensured scrollable message container with sticky input form
+- Added background image (logo.png) from public/ folder, centered inside popup
+- Improved layout stability for long responses
+- Enhanced UX with loading indicator and error fallback

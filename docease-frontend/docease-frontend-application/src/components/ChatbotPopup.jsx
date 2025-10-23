@@ -48,9 +48,9 @@ export default function ChatbotPopup({ onClose }) {
 
   return (
     <div
-      className={`fixed bottom-6 right-6 bg-white border border-green-300 shadow-lg rounded-lg w-96 z-50 transition-all duration-300 ${
+      className={`fixed bottom-6 right-6 border border-green-300 shadow-lg rounded-lg w-96 z-50 transition-all duration-300 ${
         minimized ? 'h-16 overflow-hidden' : 'h-[32rem]'
-      } flex flex-col justify-between`}
+      } flex flex-col justify-between bg-white bg-[url('/logo.png')] bg-no-repeat bg-center bg-contain`}
     >
       {/* Header */}
       <div className="flex justify-between items-center px-4 py-2 border-b">
@@ -67,7 +67,7 @@ export default function ChatbotPopup({ onClose }) {
 
       {/* Body */}
       {!minimized && (
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col h-full relative">
           {/* Messages Container */}
           <div className="flex-1 overflow-y-auto px-4 py-3">
             {messages.map((message, index) => (
@@ -92,7 +92,7 @@ export default function ChatbotPopup({ onClose }) {
           </div>
 
           {/* Input Container */}
-          <div className="p-4 border-t">
+          <div className="p-4 border-t bg-white sticky bottom-0">
             <form
               onSubmit={async (e) => {
                 e.preventDefault();
