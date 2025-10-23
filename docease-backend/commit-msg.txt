@@ -1,11 +1,16 @@
-feat: Add SpecialistSuggestionService for symptom-based specialist recommendations
+feat: Add global CORS configuration for aiservice
 
-Introduced SpecialistSuggestionService to suggest medical specialists based on user symptoms, integrated with Gemini API.
+Implemented global CORS configuration to allow frontend requests from http://localhost:5173.
 
 Key changes:
-- Created SpecialistSuggestionService to generate JSON specialist suggestions (e.g., ENT specialist for cough, sore throat).
-- Added SpecialistSuggestionController with /ai-service/specialist-suggestion/suggest endpoint.
-- Reused SymptomRequest DTO and integrated with MessageLoggingService for logging to Docease.messaging_logs.
-- Ensured prompt delivers concise JSON output under 50 words.
+- Added CorsConfig class in aiservice to enable CORS for all endpoints.
+- Configured CORS to support GET, POST, PUT, DELETE, OPTIONS methods with credentials.
+- Added aiService service on the frontend.
+- Integrated getPrecautionsAndRemedies() API call in ChatbotPopup.jsx
+- Added structured rendering for nested symptom data(precautions+remedies)
+- Implemented formatBotResponse() to display grouped results per symptom
+- Improved error handling with falllback message block
+- Updated message rendering to support JSX blocks from bot responses
+- Minor UI tweaks: spacing, scroll behavior, laoding indicator
 
-This enhances the system with specialist recommendations, maintaining modularity and logging.
+This centralizes CORS handling in aiservice, preparing for gateway-level CORS in production.
