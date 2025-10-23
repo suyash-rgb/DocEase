@@ -1,16 +1,12 @@
-feat: Add global CORS configuration for aiservice
+feat: Added functionality for medication information retrieval
 
-Implemented global CORS configuration to allow frontend requests from http://localhost:5173.
+Introduced MedicationInfoService to provide details on medicines, including uses, dosage for kids/adults, and precautions, using the Gemini API.
 
 Key changes:
-- Added CorsConfig class in aiservice to enable CORS for all endpoints.
-- Configured CORS to support GET, POST, PUT, DELETE, OPTIONS methods with credentials.
-- Added aiService service on the frontend.
-- Integrated getPrecautionsAndRemedies() API call in ChatbotPopup.jsx
-- Added structured rendering for nested symptom data(precautions+remedies)
-- Implemented formatBotResponse() to display grouped results per symptom
-- Improved error handling with falllback message block
-- Updated message rendering to support JSX blocks from bot responses
-- Minor UI tweaks: spacing, scroll behavior, laoding indicator
+- Created MedicationInfoService to generate JSON responses with medicine info.
+- Added MedicineRequest DTO with validation for medicine names.
+- Implemented MedicationInfoController with /ai-service/medication-info/get endpoint.
+- Integrated with MessageLoggingService to log medicine queries to Docease.messaging_logs.
+- Ensured prompt delivers concise JSON output under 200 words.
 
-This centralizes CORS handling in aiservice, preparing for gateway-level CORS in production.
+This enhances the system with medication information, maintaining modularity and logging.
