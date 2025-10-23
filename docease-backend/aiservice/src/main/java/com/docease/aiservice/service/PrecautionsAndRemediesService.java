@@ -1,10 +1,12 @@
 package com.docease.aiservice.service;
 
 import com.docease.aiservice.DTO.SymptomRequest;
+import com.docease.aiservice.service.MessageLoggingService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -21,6 +23,9 @@ public class PrecautionsAndRemediesService {
 
     @Value("${gemini.api.key}")
     private String geminiApiKey;
+
+    @Autowired
+    private MessageLoggingService messageLoggingService;
 
     public PrecautionsAndRemediesService(WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder.build();
@@ -48,8 +53,13 @@ public class PrecautionsAndRemediesService {
                 .bodyToMono(String.class)
                 .block();
 
-        //Extract and return response
-        return extractResposneContent(response);
+        //Extract response
+        String advice = extractResposneContent(response);
+
+        //Log the conversation
+        messageLoggingService.logConversation(symptomRequest.getSymptoms(), advice);
+
+        return advice;
     }
 
     private String extractResposneContent(String response){

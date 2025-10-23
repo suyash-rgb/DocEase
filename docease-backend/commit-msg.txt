@@ -1,0 +1,13 @@
+feat: Add generic conversation logging with MessageLoggingService
+
+Implemented reusable logging for user interactions using a dedicated MessageLoggingService. Separated logging concerns from PrecautionsAndRemediesService to support various conversation types.
+
+Key changes:
+- Created MessageLog model with generic input/output fields and optional timestamp.
+- Introduced MessageLoggingService to log conversations to messaging_logs collection in Docease DB.
+- Refactored PrecautionsAndRemediesService to delegate logging via MessageLoggingService.
+- Made timestamp optional with multiple constructors in MessageLog.
+
+fix: Resolve MessageLog constructor resolution issue
+
+Fixed 'Cannot resolve constructor' error by ensuring MessageLog provides compatible constructors and allowing timestamp to be optional or auto-set. Improved model flexibility for future use cases.
