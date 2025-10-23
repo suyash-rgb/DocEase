@@ -1,13 +1,11 @@
-feat: Add generic conversation logging with MessageLoggingService
+feat: Add SpecialistSuggestionService for symptom-based specialist recommendations
 
-Implemented reusable logging for user interactions using a dedicated MessageLoggingService. Separated logging concerns from PrecautionsAndRemediesService to support various conversation types.
+Introduced SpecialistSuggestionService to suggest medical specialists based on user symptoms, integrated with Gemini API.
 
 Key changes:
-- Created MessageLog model with generic input/output fields and optional timestamp.
-- Introduced MessageLoggingService to log conversations to messaging_logs collection in Docease DB.
-- Refactored PrecautionsAndRemediesService to delegate logging via MessageLoggingService.
-- Made timestamp optional with multiple constructors in MessageLog.
+- Created SpecialistSuggestionService to generate JSON specialist suggestions (e.g., ENT specialist for cough, sore throat).
+- Added SpecialistSuggestionController with /ai-service/specialist-suggestion/suggest endpoint.
+- Reused SymptomRequest DTO and integrated with MessageLoggingService for logging to Docease.messaging_logs.
+- Ensured prompt delivers concise JSON output under 50 words.
 
-fix: Resolve MessageLog constructor resolution issue
-
-Fixed 'Cannot resolve constructor' error by ensuring MessageLog provides compatible constructors and allowing timestamp to be optional or auto-set. Improved model flexibility for future use cases.
+This enhances the system with specialist recommendations, maintaining modularity and logging.
