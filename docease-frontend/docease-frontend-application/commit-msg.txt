@@ -1,7 +1,0 @@
-feat: API consumed from aiservice
-- Integrated getPrecautionsAndRemedies() API call in ChatbotPopup.jsx
-- Added structured rendering for nested symptom data (precautions + remedies)
-- Implemented formatBotResponse() to display grouped results per symptom
-- Improved error handling with fallback message block
-- Updated message rendering to support JSX blocks from bot responses
-- Minor UI tweaks: spacing, scroll behavior, loading indicator
