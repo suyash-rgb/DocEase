@@ -1,11 +1,9 @@
-refactor: Update SpecialistSuggestionService to return single specialist
+refactor: Add disclaimer to PrecautionsAndRemediesService response
 
-Modified SpecialistSuggestionService to suggest only one medical specialist per symptom set.
+Updated PrecautionsAndRemediesService to include a disclaimer in the JSON response.
 
 Key changes:
-- Updated buildPrompt to request a single specialist in JSON format ({\"specialist\": \"...\"}).
-- Adjusted prompt to emphasize 'most suitable specialist' and maintain 20-word limit.
-- Ensured compatibility with MessageLoggingService for logging to Docease.messaging_logs.
-- No changes to SpecialistSuggestionController or SymptomRequest DTO.
+- Modified buildPrompt to add 'disclaimer' field with specified text.
+- Ensured response stays under 250 words, logged to Docease.messaging_logs.
 
-This refines the specialist suggestion feature for focused recommendations.
+This enhances the response with a medical disclaimer for user safety.

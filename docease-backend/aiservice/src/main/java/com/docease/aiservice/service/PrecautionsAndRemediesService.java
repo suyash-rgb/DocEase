@@ -84,11 +84,11 @@ public class PrecautionsAndRemediesService {
         }
     }
 
-    private String buildPrompt(SymptomRequest symptomRequest){
+    private String buildPrompt(SymptomRequest symptomRequest) {
         StringBuilder prompt = new StringBuilder();
-        prompt.append("Generate a few precautions and home remedies for the following symptoms. ");
-        prompt.append("\nSymptoms: \n").append(symptomRequest.getSymptoms());
-        prompt.append(". Include only precautions and remedies specific to the listed symptoms. Exclude general precautions. Structure the response as JSON with a 'precautions' array and a 'remedies' array for each symptom. Keep the response under 250 words. Example format: {\"symptoms\": {\"fever\": {\"precautions\": [], \"remedies\": []}, \"cough\": {\"precautions\": [], \"remedies\": []}}}");
+        prompt.append("Generate a concise JSON response with precautions and home remedies for the following symptoms: ")
+                .append(symptomRequest.getSymptoms())
+                .append(". Include only precautions and remedies specific to the listed symptoms. Exclude general precautions. Structure the response as JSON with a 'symptoms' object containing 'precautions' and 'remedies' arrays for each symptom, and a 'disclaimer' field at the end. Keep under 250 words. Example format: {\"symptoms\": {\"fever\": {\"precautions\": [], \"remedies\": []}, \"cough\": {\"precautions\": [], \"remedies\": []}}, \"disclaimer\": \"Please remember that this is not a substitute for professional medical advice. If your symptoms are severe, persistent, or worsening, you should seek medical attention from a doctor or other qualified healthcare provider.\"}");
         return prompt.toString();
     }
 }
