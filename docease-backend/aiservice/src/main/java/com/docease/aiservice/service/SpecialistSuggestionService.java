@@ -80,11 +80,11 @@ public class SpecialistSuggestionService {
         }
     }
 
-    private String buildPrompt(SymptomRequest symptomRequest){
+    private String buildPrompt(SymptomRequest symptomRequest) {
         StringBuilder prompt = new StringBuilder();
-        prompt.append("Generate a concise JSON response suggesting medical specialists for the following symptoms: ")
+        prompt.append("Generate a concise JSON response suggesting the most suitable medical specialist for the following symptoms: ")
                 .append(symptomRequest.getSymptoms())
-                .append("Provide a list of appropriate specialists (e.g., ENT specialist, general physician, endocrinologist, rheumatologist) based on the symptoms. Structure the response as JSON with a 'specialists' array. Keep the response under 50 words. Example format: {\"specialists\": [\"ENT specialist\", \"General physician\"]}");
+                .append(". Provide only one specialist (e.g., ENT specialist, General physician, Endocrinologist, Rheumatologist) based on the symptoms. Structure the response as JSON with a 'specialist' field. Keep the response under 20 words. Example format: {\"specialist\": \"ENT specialist\"}");
         return prompt.toString();
     }
 

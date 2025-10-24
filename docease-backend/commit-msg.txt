@@ -1,11 +1,11 @@
-feat: lab test report analysis
+refactor: Update SpecialistSuggestionService to return single specialist
 
-Introduced LabTestExplainerService to analyze uploaded lab test images and provide simple explanations.
+Modified SpecialistSuggestionService to suggest only one medical specialist per symptom set.
 
 Key changes:
-- Created LabTestExplainerService to process images via Gemini API and return JSON with explanation, conclusions, and next steps.
-- Added LabTestExplainerController with /ai-service/lab-test-explainer/explain endpoint for multipart file uploads.
-- Integrated with MessageLoggingService to log requests to Docease.messaging_logs.
-- Ensured prompt delivers concise JSON output under 300 words.
+- Updated buildPrompt to request a single specialist in JSON format ({\"specialist\": \"...\"}).
+- Adjusted prompt to emphasize 'most suitable specialist' and maintain 20-word limit.
+- Ensured compatibility with MessageLoggingService for logging to Docease.messaging_logs.
+- No changes to SpecialistSuggestionController or SymptomRequest DTO.
 
-This enhances the chatbot with lab test analysis for non-medical users.
+This refines the specialist suggestion feature for focused recommendations.
