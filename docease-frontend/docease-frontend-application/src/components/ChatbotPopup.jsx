@@ -14,7 +14,7 @@ export default function ChatbotPopup({ onClose }) {
   }, []);
 
   const formatBotResponse = (response) => {
-    const { symptoms } = response;
+    const { symptoms, disclaimer } = response;
     const blocks = [];
 
     for (const [symptom, data] of Object.entries(symptoms)) {
@@ -37,6 +37,15 @@ export default function ChatbotPopup({ onClose }) {
               ))}
             </ul>
           </div>
+        </div>
+      );
+    }
+
+    // Add disclaimer at the bottom
+    if (disclaimer) {
+      blocks.push(
+        <div key="disclaimer" className="mt-4 p-2 bg-yellow-50 border border-yellow-200 rounded-lg">
+          <p className="text-xs text-gray-600 italic">{disclaimer}</p>
         </div>
       );
     }
@@ -118,6 +127,7 @@ export default function ChatbotPopup({ onClose }) {
                             remedies: ['Sorry, I had trouble processing your symptoms. Please try again.'],
                           },
                         },
+                        disclaimer: 'This is an error message. Please try again or contact support if the issue persists.'
                       },
                     },
                   ]);
