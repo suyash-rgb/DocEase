@@ -1,12 +1,11 @@
-feat: Added functionality for medication information retrieval
+feat: lab test report analysis
 
-Introduced MedicationInfoService to provide details on medicines, including uses, dosage for kids/adults, and precautions, using the Gemini API.
+Introduced LabTestExplainerService to analyze uploaded lab test images and provide simple explanations.
 
 Key changes:
-- Created MedicationInfoService to generate JSON responses with medicine info.
-- Added MedicineRequest DTO with validation for medicine names.
-- Implemented MedicationInfoController with /ai-service/medication-info/get endpoint.
-- Integrated with MessageLoggingService to log medicine queries to Docease.messaging_logs.
-- Ensured prompt delivers concise JSON output under 200 words.
+- Created LabTestExplainerService to process images via Gemini API and return JSON with explanation, conclusions, and next steps.
+- Added LabTestExplainerController with /ai-service/lab-test-explainer/explain endpoint for multipart file uploads.
+- Integrated with MessageLoggingService to log requests to Docease.messaging_logs.
+- Ensured prompt delivers concise JSON output under 300 words.
 
-This enhances the system with medication information, maintaining modularity and logging.
+This enhances the chatbot with lab test analysis for non-medical users.
