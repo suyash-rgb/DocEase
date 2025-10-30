@@ -1,13 +1,7 @@
-refactor: Added a Welcome panel in Chatbot UI 
-- Added a welcome panel (brand + short app-context message) shown when chatbot opens
-- Added quick-action buttons under the welcome text:
-  - First Aid Guidance
-  - Symptoms Checker
-  - Specialist Recommendation
-  - Medication Info
-  - Lab Test Explainer
-  - Talk to a doctor
-- Clicking "Symptoms Checker" opens the symptom-input flow (focuses input). The actual API call is made when the user submits the symptom text
-- Other buttons push contextual bot messages (placeholder responses you can replace with richer flows)
-- Kept existing rendering of API response via formatBotResponse
-- Ensured sticky input, scrollable message area, loading state, and centered background logo
+feat(chatbot): enhance UI/UX with animations(Framer Motion) and visual improvements 
+
+- Add background image layer with controlled opacity
+- Implement Framer Motion animations for smooth transitions
+- Improve layout structure and component hierarchy
+- Update error handling for new API response format
+- Add backdrop blur effects for better visual hierarchy
