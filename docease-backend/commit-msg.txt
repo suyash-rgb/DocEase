@@ -1,9 +1,39 @@
-refactor: Add disclaimer to PrecautionsAndRemediesService response
+feat(user-service): add doctor registration API
 
-Updated PrecautionsAndRemediesService to include a disclaimer in the JSON response.
+- Added POST /api/doctors/register endpoint
+- Creates User + Doctor in one transaction
+- Connected to MySQL (docease DB) via JPA
+- Eureka client enabled (spring.application.name=user-service)
 
-Key changes:
-- Modified buildPrompt to add 'disclaimer' field with specified text.
-- Ensured response stays under 250 words, logged to Docease.messaging_logs.
+Entities:
+- Role, User, Doctor with correct JPA mappings
+- Fixed consultation_fee → BigDecimal (money-safe)
+- Fixed user_id field name mismatch
 
-This enhances the response with a medical disclaimer for user safety.
+DTO Validation:
+- @Valid + @Pattern for 10-digit phone
+- Required: username, email, password, specialization
+
+Duplicate Handling:
+- Custom DuplicateResourceException
+- Checks existsByUsername / existsByEmail
+- Returns 409 Conflict with clear message
+- Handled directly in controller
+
+Security:
+- Password hashed with BCrypt
+- No auth (MVP)
+
+Config:
+- application.yml: MySQL, JPA (validate), Eureka
+- Security config permits all requests
+
+Tested with cURL:
+- Success → 200 + doctor object
+- Invalid phone → 400
+- Duplicate email/username → 409
+
+Dependencies added:
+- web, data-jpa, validation, security, mysql, lombok, eureka-client
+
+Closes: Doctor registration MVP
