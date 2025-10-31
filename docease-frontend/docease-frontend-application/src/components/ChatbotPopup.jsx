@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { getPrecautionsAndRemedies } from '../services/aiService';
+import { getPrecautionsAndRemedies, getMedicationInfo } from '../services/aiService';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function ChatbotPopup({ onClose }) {
@@ -93,7 +93,7 @@ export default function ChatbotPopup({ onClose }) {
         break;
 
       case 'medication':
-        pushBotMessage('Medication Info: enter a medicine name or describe the symptom to get general medication guidance.');
+        pushBotMessage('Enter a medicine name to get general medication guidance.');
         setShowInput(true);
         setTimeout(() => inputRef.current?.focus(), 50);
         break;
@@ -265,15 +265,51 @@ export default function ChatbotPopup({ onClose }) {
                       e.preventDefault();
                       if (!userInput.trim()) return;
 
-                      const symptoms = userInput.trim();
-                      setMessages((prev) => [...prev, { type: 'user', content: symptoms }]);
+                      const input = userInput.trim();
+                      setMessages((prev) => [...prev, { type: 'user', content: input }]);
                       setUserInput('');
                       setIsLoading(true);
 
                       try {
-                        const response = await getPrecautionsAndRemedies(symptoms);
-                        setMessages((prev) => [...prev, { type: 'bot', content: response }]);
-                      } catch {
+                        let response;
+                        const lastMessage = messages.length > 0 ? messages[messages.length - 1].content : '';
+                        const isMedicationRequest = lastMessage === 'Enter a medicine name to get general medication guidance.';
+                        
+                        console.log('Request type:', isMedicationRequest ? 'Medication' : 'Symptoms');
+                        console.log('User input:', input);
+
+                        if (isMedicationRequest) {
+                          // Handle medication info request
+                          console.log('Calling medication info API with input:', input);
+                          response = await getMedicationInfo(input);
+                          console.log('Medication API response:', response);
+                          
+                          // Get the first medicine info from the response
+                          const medicineName = Object.keys(response.medicines)[0];
+                          const medicineInfo = response.medicines[medicineName];
+                          
+                          const formattedResponse = {
+                            symptoms: {
+                              [medicineName]: {
+                                precautions: [medicineInfo.precautions],
+                                remedies: [
+                                  `Uses: ${medicineInfo.uses}`,
+                                  `Dosage:`,
+                                  `- Adults: ${medicineInfo.dosage.adults}`,
+                                  `- Children: ${medicineInfo.dosage.kids}`
+                                ]
+                              }
+                            },
+                            disclaimer: 'This information is for general guidance only. Always consult with a healthcare professional before taking any medication.'
+                          };
+                          setMessages((prev) => [...prev, { type: 'bot', content: formattedResponse }]);
+                        } else {
+                          // Handle symptoms request
+                          response = await getPrecautionsAndRemedies(input);
+                          console.log('Symptoms API response:', response);
+                          setMessages((prev) => [...prev, { type: 'bot', content: response }]);
+                        }
+                      } catch (error) {
                         setMessages((prev) => [
                           ...prev,
                           {
@@ -282,7 +318,7 @@ export default function ChatbotPopup({ onClose }) {
                               symptoms: {
                                 error: {
                                   precautions: [],
-                                  remedies: ['Sorry, I had trouble processing your symptoms. Please try again.'],
+                                  remedies: ['Sorry, I had trouble processing your request. Please try again.'],
                                 },
                               },
                               disclaimer:
@@ -290,6 +326,7 @@ export default function ChatbotPopup({ onClose }) {
                             },
                           },
                         ]);
+                        console.error('Request failed:', error);
                       } finally {
                         setIsLoading(false);
                       }

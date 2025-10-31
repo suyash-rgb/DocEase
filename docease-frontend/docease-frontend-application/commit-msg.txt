@@ -1,7 +1,17 @@
-feat(chatbot): enhance UI/UX with animations(Framer Motion) and visual improvements 
+feat(chatbot): integrate medication info API
 
-- Add background image layer with controlled opacity
-- Implement Framer Motion animations for smooth transitions
-- Improve layout structure and component hierarchy
-- Update error handling for new API response format
-- Add backdrop blur effects for better visual hierarchy
+- Added medication info API integration using getMedicationInfo service
+- Implemented conditional API calling based on user action type
+- Enhanced response formatting for medication information including:
+  - Medicine name as header
+  - Usage information
+  - Detailed dosage for adults and children
+  - Precautions
+- Added detailed console logging for better debugging
+- Updated medical disclaimer handling
+- Improved error handling for both symptom and medication requests
+
+Testing Notes:
+- Symptom checker API working as expected
+- Medication info API integrated and tested
+- Response formatting matches new API structure

@@ -21,3 +21,15 @@ export const getPrecautionsAndRemedies = async (symptoms) => {
         throw error;
     }
 };
+
+export const getMedicationInfo = async (medicines) => {
+    try {
+        const response = await aiServiceClient.post('/medication-info/get', {
+            medicines
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error getting the medication info:', error.response?.data || error.message);
+        throw error;
+    }
+};
