@@ -1,0 +1,39 @@
+feat(ai-service): integrate first-aid knowledge base with fuzzy search
+
+### Overview
+Successfully integrated a **production-ready first-aid knowledge base** into the existing `ai-service` using **MySQL** alongside **MongoDB**, without creating a new microservice.
+
+---
+
+### Key Features Added
+- **4-table schema** in `first_aid` database:
+  - `first_aid_tags` → Medical topics (e.g., "Sprain")
+  - `first_aid_response_groups` → Logical answer groups (e.g., "R.I.C.E.", "Duration")
+  - `first_aid_patterns` → Multiple user phrasings per group
+  - `first_aid_responses` → Ordered, multi-step responses with `step_order`
+
+- **Fuzzy + exact matching** using MySQL `FULLTEXT` index with `ngram` parser
+- **Fallback mechanism** via `is_fallback = true` responses
+- **Multi-step structured responses** (not single-string answers)
+
+---
+
+### Technical Implementation
+- **Dual data source configuration**:
+  - MongoDB (`docease`) – unchanged
+  - MySQL (`first_aid`) – new JPA configuration
+- **Explicit `@Column(name = "...")`** on all fields to match snake_case DB columns
+- **Fixed critical Spring Boot 3 issues**:
+  - `jdbc-url` vs `url` in `application.yml`
+  - Hibernate dialect auto-detection failure
+  - CamelCase vs snake_case naming mismatch
+- **Dedicated packages**:
+  - `entity.firstaid`
+  - `repository.firstaid`
+  - `config.FirstAidDataSourceConfig`
+
+---
+
+### API Endpoint
+```http
+GET /api/ai/first-aid?q={user query}

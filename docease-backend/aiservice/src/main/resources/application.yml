@@ -1,10 +1,30 @@
 spring:
   application:
     name: aiservice
+  # === MongoDB ===
   data:
     mongodb:
       uri: mongodb://localhost:27017/docease
 
+  # === MySQL ===
+  datasource:
+    firstaid:
+      jdbc-url: jdbc:mysql://localhost:3306/aiservice_first_aid?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      username: root
+      password: root
+      driver-class-name: com.mysql.cj.jdbc.Driver
+
+    jpa:
+      firstaid:
+        hibernate:
+          ddl-auto: validate
+        show-sql: true
+        database-platform: org.hibernate.dialect.MySQL8Dialect
+        properties:
+          hibernate:
+            format_sql: true
+
+# === Eureka Service Discovery
 eureka:
   client:
     service-url:

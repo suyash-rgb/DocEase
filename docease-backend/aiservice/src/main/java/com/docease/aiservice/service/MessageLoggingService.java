@@ -1,11 +1,8 @@
 package com.docease.aiservice.service;
 
-import com.docease.aiservice.model.MessageLog;
+import com.docease.aiservice.entity.MessageLog;
 import com.docease.aiservice.repository.MessagingLogsRepository;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
-import java.util.logging.Logger;
 
 @Service
 public class MessageLoggingService {
