@@ -17,14 +17,14 @@ export default function QuickActions({ onAction }) {
     <motion.div variants={container} initial="hidden" animate="visible" exit="exit" className="mt-3 flex flex-wrap gap-2">
       <motion.button variants={item} onClick={() => onAction('firstAid')} className="text-xs px-2 py-1 rounded bg-gray-100 hover:bg-gray-200 transition-colors">
         First Aid Guidance
-      </motion.button>
+      </motion.button> 
 
       <motion.button variants={item} onClick={() => onAction('symptomChecker')} className="text-xs px-2 py-1 rounded bg-green-50 text-green-700 border border-green-100 hover:bg-green-100 transition-colors">
         Symptoms Checker
       </motion.button>
 
       <motion.button variants={item} onClick={() => onAction('specialist')} className="text-xs px-2 py-1 rounded bg-gray-100 hover:bg-gray-200 transition-colors">
-        Specialist Recommendation
+        Specialist Recommender
       </motion.button>
 
       <motion.button variants={item} onClick={() => onAction('medication')} className="text-xs px-2 py-1 rounded bg-gray-100 hover:bg-gray-200 transition-colors">

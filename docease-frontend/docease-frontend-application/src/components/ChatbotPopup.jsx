@@ -21,97 +21,81 @@ export default function ChatbotPopup({ onClose }) {
   const [showQuickActions, setShowQuickActions] = useState(true);
   const [showWelcome, setShowWelcome] = useState(true);
   const [error, setError] = useState(null);
+  const [expectedInputMode, setExpectedInputMode] = useState('none');
   const inputRef = useRef(null);
 
   useEffect(() => {
-    const timer = setTimeout(() => setVisible(true), 2000);
+    const timer = setTimeout(() => setVisible(true), 300);
+    console.log('Chatbot popup mounted');
     return () => clearTimeout(timer);
   }, []);
 
-  const pushBotMessage = (message) => {
+  const scrollToBottom = () => {
+    const chatContainer = document.querySelector('.overflow-y-auto');
+    if (chatContainer) {
+      setTimeout(() => {
+        chatContainer.scrollTo({ top: chatContainer.scrollHeight, behavior: 'smooth' });
+      }, 100);
+    }
+  };
+
+  const pushBotMessage = (message, mode = 'none') => {
     setMessages((prev) => [
       ...prev,
       {
-        type: "bot",
-        content: {
-          symptoms: {
-            info: {
-              precautions: [],
-              remedies: [message],
-            },
-          },
-          disclaimer:
-            "This is an automated response. Please consult with a healthcare professional for personalized advice.",
-        },
+        type: 'bot',
+        content: message
       },
     ]);
+    setExpectedInputMode(mode);
+    console.debug('[pushBotMessage] mode set to:', mode);
+    scrollToBottom();
   };
 
   const handleQuickAction = async (action) => {
     setShowQuickActions(false);
     setShowWelcome(false);
+    scrollToBottom();
 
     switch (action) {
       case 'firstAid':
-        setMessages(prev => [...prev, {
-          type: 'bot',
-          content: {
-            symptoms: {
-              firstAid: {
-                precautions: [],
-                remedies: ['Basic first aid: ensure safety, stop bleeding with pressure, immobilize fractures, call emergency services if severe.'],
-              },
-            },
-            disclaimer: 'First aid tips are general. For emergencies call local services.',
-          },
-        }]);
+        pushBotMessage('Basic first aid: ensure safety, stop bleeding with pressure, immobilize fractures, call emergency services if severe.');
         setShowInput(false);
-        setTimeout(() => setShowQuickActions(true), 220);
+        setExpectedInputMode('none');
+        setTimeout(() => setShowQuickActions(true), 1000);
         break;
 
       case 'symptomChecker':
+        pushBotMessage('Enter your symptoms (e.g., fever, cough)', 'symptom');
         setShowInput(true);
         setTimeout(() => inputRef.current?.focus(), 50);
-        setShowQuickActions(true);
-        break;
-
-      // ... other cases
-      case 'specialist':
-        pushBotMessage(
-          'Specialist Recommender: Feature coming soon!'
-        );
-        setShowInput(true);
-        setTimeout(() => inputRef.current?.focus(), 50);
-        // Re-show quick actions after message
-        setTimeout(() => setShowQuickActions(true), 220);
         break;
 
       case 'medication':
-        pushBotMessage('Enter a medicine name to get general medication guidance.');
+        pushBotMessage('Enter a medicine name to get general medication guidance.', 'medication');
         setShowInput(true);
         setTimeout(() => inputRef.current?.focus(), 50);
-        // Re-show quick actions after message
-        setTimeout(() => setShowQuickActions(true), 220);
         break;
 
       case 'lab':
-        pushBotMessage('Lab Test Explainer: enter the name of the test or paste key values (e.g., HbA1c, CBC) for a short explainer.');
-        setShowInput(true);
-        setTimeout(() => inputRef.current?.focus(), 50);
-        // Re-show quick actions after message
-        setTimeout(() => setShowQuickActions(true), 220);
+        pushBotMessage('Lab Test Explainer: Feature coming soon!', 'none');
+        setShowInput(false);
+        setTimeout(() => setShowQuickActions(true), 500);
+        break;
+
+      case 'specialist':
+        pushBotMessage('Specialist Recommender: Feature coming soon!', 'none');
+        setShowInput(false);
+        setTimeout(() => setShowQuickActions(true), 500);
         break;
 
       case 'talkDoctor':
-        pushBotMessage('Talk to a Doctor: You can request a teleconsultation or share symptoms and I will guide you how to reach a clinician.');
-        setShowInput(true);
-        setTimeout(() => inputRef.current?.focus(), 50);
-        // Re-show quick actions after message
-        setTimeout(() => setShowQuickActions(true), 220);
+        pushBotMessage('Talk to a Doctor: Feature coming soon!', 'none');
+        setShowInput(false);
+        setTimeout(() => setShowQuickActions(true), 500);
         break;
 
       default:
-        // Re-show quick actions if no action taken
         setShowQuickActions(true);
         break;
     }
@@ -119,50 +103,62 @@ export default function ChatbotPopup({ onClose }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.debug('[handleSubmit] mode:', expectedInputMode, 'input:', userInput);
+
     if (!userInput.trim()) return;
 
     const input = userInput.trim();
-    setMessages(prev => [...prev, { type: 'user', content: input }]);
+    setMessages((prev) => [...prev, { type: 'user', content: input }]);
     setUserInput('');
     setIsLoading(true);
     setShowQuickActions(false);
 
     try {
-      const lastMessage = messages[messages.length - 1]?.content;
-      const isMedicationRequest = lastMessage === 'Enter a medicine name to get general medication guidance.';
-      
-      let response = isMedicationRequest
-        ? await handleMedicationRequest(input)
-        : await handleSymptomRequest(input);
+      let response;
+      if (expectedInputMode === 'medication') {
+        response = await handleMedicationRequest(input);
+      } else {
+        response = await handleSymptomRequest(input);
+      }
 
-      setMessages(prev => [...prev, { type: 'bot', content: response }]);
+      setMessages((prev) => [...prev, { type: 'bot', content: response }]);
+      setExpectedInputMode('none');
+      setShowInput(false);
+      setShowQuickActions(true);
     } catch (err) {
-      const errorMessage = 'Sorry, I had trouble processing your request. Please try again.';
-      setError(errorMessage);
+      console.error('[handleSubmit] error:', err);
+      setError('Sorry, I had trouble processing your request. Please try again.');
     } finally {
       setIsLoading(false);
-      setTimeout(() => setShowQuickActions(true), 220);
+      scrollToBottom();
     }
   };
 
   const handleMedicationRequest = async (input) => {
     const response = await getMedicationInfo(input);
-    const medicineName = Object.keys(response.medicines)[0];
-    const medicineInfo = response.medicines[medicineName];
-    
+    console.debug('[handleMedicationRequest] response:', response);
+
+    if (!response || !response.medicines || Object.keys(response.medicines).length === 0) {
+      return {
+        medicines: {
+          [input]: {
+            uses: 'No information available.',
+            dosage: {
+              adults: 'Not available',
+              kids: 'Not available',
+            },
+            precautions: 'No precautions listed.',
+          },
+        },
+        disclaimer:
+          'No medication data found. Please consult a healthcare professional before taking any medication.',
+      };
+    }
+
     return {
-      symptoms: {
-        [medicineName]: {
-          precautions: [medicineInfo.precautions],
-          remedies: [
-            `Uses: ${medicineInfo.uses}`,
-            `Dosage:`,
-            `- Adults: ${medicineInfo.dosage.adults}`,
-            `- Children: ${medicineInfo.dosage.kids}`
-          ]
-        }
-      },
-      disclaimer: 'This information is for general guidance only. Always consult with a healthcare professional before taking any medication.'
+      medicines: response.medicines,
+      disclaimer:
+        'This information is for general guidance only. Always consult with a healthcare professional before taking any medication.',
     };
   };
 
@@ -172,52 +168,51 @@ export default function ChatbotPopup({ onClose }) {
     <AnimatePresence>
       {visible && (
         <ChatContainer>
-          <ChatHeader 
+          <ChatHeader
             onClose={onClose}
             minimized={minimized}
             onMinimize={() => setMinimized(!minimized)}
           />
-
           {!minimized && (
             <div className="flex flex-col h-full relative">
-              <div className="flex-1 overflow-y-auto px-4 py-3 bg-white/50">
-                {showWelcome && <WelcomeMessage />}
-
-                {messages.map((message, index) => (
-                  message.type === 'user' 
-                    ? <UserMessage key={index} content={message.content} />
-                    : <BotMessage key={index} content={message.content} />
-                ))}
-
-                {isLoading && <LoadingIndicator />}
-                {error && <Disclaimer text={error} type="error" />}
-
-                {showQuickActions && !isLoading && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mt-4"
-                  >
-                    {messages.length > 0 && (
+              <div className="flex-1 overflow-y-auto px-4 py-3 bg-white/50 scroll-smooth" style={{ height: 'calc(100% - 120px)' }}>
+                <div className="space-y-4 pb-4 min-h-full">
+                  {showWelcome && <WelcomeMessage />}
+                  {messages.map((message, index) =>
+                    message.type === 'user' ? (
+                      <UserMessage key={index} content={message.content} />
+                    ) : (
+                      <BotMessage key={index} content={message.content} />
+                    )
+                  )}
+                  {isLoading && <LoadingIndicator />}
+                  {error && <Disclaimer text={error} type="error" />}
+                  {showQuickActions && !isLoading && !showInput && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="mt-4 pb-2"
+                    >
                       <div className="inline-block bg-gray-100 rounded-lg p-3 w-full">
-                        <div className="text-xs text-gray-600 mb-2">
-                          What would you like to do next?
-                        </div>
+                        {messages.length > 0 && (
+                          <div className="text-xs text-gray-600 mb-2">
+                            What would you like to do next?
+                          </div>
+                        )}
                         <QuickActions onAction={handleQuickAction} />
                       </div>
-                    )}
-                    {messages.length === 0 && <QuickActions onAction={handleQuickAction} />}
-                  </motion.div>
-                )}
+                    </motion.div>
+                  )}
+                </div>
               </div>
-
-              <ChatInput 
+              <ChatInput
                 onSubmit={handleSubmit}
                 userInput={userInput}
                 setUserInput={setUserInput}
                 isLoading={isLoading}
                 showInput={showInput}
                 inputRef={inputRef}
+                expectedInputMode={expectedInputMode}
               />
             </div>
           )}

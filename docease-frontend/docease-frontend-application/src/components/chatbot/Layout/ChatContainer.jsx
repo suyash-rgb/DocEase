@@ -8,7 +8,7 @@ export default function ChatContainer({ children }) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
       transition={{ duration: 0.3 }}
-      className="fixed bottom-6 right-6 border border-green-300 shadow-lg rounded-lg w-96 z-50 h-[32rem] flex flex-col justify-between bg-white overflow-hidden"
+      className="fixed bottom-6 right-6 border border-green-300 shadow-lg rounded-lg w-96 z-50 h-[600px] flex flex-col bg-white overflow-hidden"
     >
       {/* Background Image Layer */}
       <div className="absolute inset-0 z-0">

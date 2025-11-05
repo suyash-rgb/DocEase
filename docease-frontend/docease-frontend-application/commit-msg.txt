@@ -1,32 +1,46 @@
-refactor(chatbot): modularize components and enhance state management
+refactor(chatbot): enhance UI/UX and implement dynamic message handling
 
-Components Created:
-- Layout/
-  - ChatContainer: Main container with background and animations
-  - ChatHeader: Header with title and control buttons
-  - ChatInput: Input form component
+Layout & Visual Improvements:
+- Refactored ChatContainer for proper height calculation and scroll behavior
+- Improved spacing, padding, and backdrop styling for message flow
+- Added smooth transitions for quick actions and input visibility
+- Dynamically updated input placeholder based on selected quick action
+- Enhanced focus management for input field after action selection
 
-- Messages/
-  - BotMessage: Handles formatting and displaying bot responses
-  - UserMessage: Displays user messages
-  - WelcomeMessage: Welcome message with logo
+Message Handling:
+- Implemented expectedInputMode state to route user input to correct API
+- Added pushBotMessage helper to couple prompt and mode consistently
+- Integrated medication info API with proper formatting and rendering
+- Preserved native API response structure for medication (no symptom wrapping)
+- Updated BotMessage to support both symptoms and medicines formats
+- Added fallback rendering for unknown message shapes
 
-- Utils/
-  - LoadingIndicator: Loading state component
-  - Disclaimer: Reusable disclaimer component for errors/warnings
+Component Structure:
+- Modularized chatbot into Layout, Messages, and Utils folders
+- Created reusable components: ChatHeader, ChatInput, BotMessage, UserMessage, WelcomeMessage, LoadingIndicator, Disclaimer
+- Improved prop management and component hierarchy for maintainability
 
-Improvements:
-- Separated UI components into logical folders
-- Improved state management and error handling
-- Enhanced message flow and animations
-- Added proper loading states
-- Implemented modular quick actions
-- Enhanced response formatting for medications and symptoms
-- Added proper type checking for API responses
+Features & Interactions:
+- Added dynamic placeholder hints inside input box based on mode
+- Implemented proper show/hide timing for quick actions and input field
+- Enhanced message flow for better conversational UX
+- Added handling for unimplemented features (e.g., specialist, talkDoctor)
+- Improved error boundaries and fallback responses
 
-Technical Updates:
-- Better component composition
-- Improved error boundary implementation
-- Enhanced accessibility
-- Better state management patterns
-- Cleaner prop drilling
+Error Handling:
+- Added consistent error state and disclaimer rendering
+- Implemented fallback medication response when API returns empty
+- Enhanced error message display with visual styling
+- Added console logs for debugging and mode tracking
+
+Technical Improvements:
+- Improved state management with mode-driven input routing
+- Added cleanup logic in useEffect for visibility timer
+- Enhanced debugging with console.debug and console.error logs
+- Verified component lifecycle and prop flow
+
+Testing:
+- Verified medication info integration end-to-end
+- Tested symptom checker workflow with multiple inputs
+- Validated quick actions behavior and re-render timing
+- Confirmed error handling scenarios and fallback rendering
