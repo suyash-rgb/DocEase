@@ -1,18 +1,32 @@
-rafactor(chatbot): enhance UI/UX with animations and component restructuring
+refactor(chatbot): modularize components and enhance state management
 
-- Visual Enhancements:
-  - Added background image layer with controlled opacity
-  - Implemented backdrop blur effects
-  - Enhanced message styling and layout
+Components Created:
+- Layout/
+  - ChatContainer: Main container with background and animations
+  - ChatHeader: Header with title and control buttons
+  - ChatInput: Input form component
 
-- Interaction Improvements:
-  - Added Framer Motion animations for smooth transitions
-  - Implemented quick actions that follow conversation flow
-  - Enhanced welcome message behavior
-  - Added loading states and transitions
+- Messages/
+  - BotMessage: Handles formatting and displaying bot responses
+  - UserMessage: Displays user messages
+  - WelcomeMessage: Welcome message with logo
 
-- Code Organization:
-  - Separated QuickActions into its own component
-  - Added proper state management
-  - Improved error handling
-  - Enhanced API integration for symptoms and medication info
+- Utils/
+  - LoadingIndicator: Loading state component
+  - Disclaimer: Reusable disclaimer component for errors/warnings
+
+Improvements:
+- Separated UI components into logical folders
+- Improved state management and error handling
+- Enhanced message flow and animations
+- Added proper loading states
+- Implemented modular quick actions
+- Enhanced response formatting for medications and symptoms
+- Added proper type checking for API responses
+
+Technical Updates:
+- Better component composition
+- Improved error boundary implementation
+- Enhanced accessibility
+- Better state management patterns
+- Cleaner prop drilling
