@@ -1,17 +1,18 @@
-feat(chatbot): integrate medication info API
+rafactor(chatbot): enhance UI/UX with animations and component restructuring
 
-- Added medication info API integration using getMedicationInfo service
-- Implemented conditional API calling based on user action type
-- Enhanced response formatting for medication information including:
-  - Medicine name as header
-  - Usage information
-  - Detailed dosage for adults and children
-  - Precautions
-- Added detailed console logging for better debugging
-- Updated medical disclaimer handling
-- Improved error handling for both symptom and medication requests
+- Visual Enhancements:
+  - Added background image layer with controlled opacity
+  - Implemented backdrop blur effects
+  - Enhanced message styling and layout
 
-Testing Notes:
-- Symptom checker API working as expected
-- Medication info API integrated and tested
-- Response formatting matches new API structure
+- Interaction Improvements:
+  - Added Framer Motion animations for smooth transitions
+  - Implemented quick actions that follow conversation flow
+  - Enhanced welcome message behavior
+  - Added loading states and transitions
+
+- Code Organization:
+  - Separated QuickActions into its own component
+  - Added proper state management
+  - Improved error handling
+  - Enhanced API integration for symptoms and medication info

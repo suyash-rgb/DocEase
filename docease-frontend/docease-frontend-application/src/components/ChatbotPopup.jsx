@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { getPrecautionsAndRemedies, getMedicationInfo } from '../services/aiService';
 import { motion, AnimatePresence } from 'framer-motion';
+import QuickActions from './QuickActions';
 
 export default function ChatbotPopup({ onClose }) {
   const [visible, setVisible] = useState(false);
@@ -9,6 +10,8 @@ export default function ChatbotPopup({ onClose }) {
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showInput, setShowInput] = useState(false);
+  const [showQuickActions, setShowQuickActions] = useState(true);
+  const [showWelcome, setShowWelcome] = useState(true);
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -62,7 +65,11 @@ export default function ChatbotPopup({ onClose }) {
     setMessages((prev) => [...prev, { type: 'bot', content }]);
   };
 
-  const handleQuickAction = (action) => {
+  const handleQuickAction = async (action) => {
+    // Hide quick actions while processing
+    setShowQuickActions(false);
+    setShowWelcome(false); // Hide welcome message after first action
+
     switch (action) {
       case 'firstAid':
         pushBotMessage({
@@ -77,11 +84,15 @@ export default function ChatbotPopup({ onClose }) {
           disclaimer: 'First aid tips are general. For emergencies call local services.',
         });
         setShowInput(false);
+        // Re-show quick actions after response
+        setTimeout(() => setShowQuickActions(true), 220);
         break;
 
       case 'symptomChecker':
         setShowInput(true);
         setTimeout(() => inputRef.current?.focus(), 50);
+        // Re-show quick actions immediately for input
+        setShowQuickActions(true);
         break;
 
       case 'specialist':
@@ -90,27 +101,37 @@ export default function ChatbotPopup({ onClose }) {
         );
         setShowInput(true);
         setTimeout(() => inputRef.current?.focus(), 50);
+        // Re-show quick actions after message
+        setTimeout(() => setShowQuickActions(true), 220);
         break;
 
       case 'medication':
         pushBotMessage('Enter a medicine name to get general medication guidance.');
         setShowInput(true);
         setTimeout(() => inputRef.current?.focus(), 50);
+        // Re-show quick actions after message
+        setTimeout(() => setShowQuickActions(true), 220);
         break;
 
       case 'lab':
         pushBotMessage('Lab Test Explainer: enter the name of the test or paste key values (e.g., HbA1c, CBC) for a short explainer.');
         setShowInput(true);
         setTimeout(() => inputRef.current?.focus(), 50);
+        // Re-show quick actions after message
+        setTimeout(() => setShowQuickActions(true), 220);
         break;
 
       case 'talkDoctor':
         pushBotMessage('Talk to a Doctor: You can request a teleconsultation or share symptoms and I will guide you how to reach a clinician.');
         setShowInput(true);
         setTimeout(() => inputRef.current?.focus(), 50);
+        // Re-show quick actions after message
+        setTimeout(() => setShowQuickActions(true), 220);
         break;
 
       default:
+        // Re-show quick actions if no action taken
+        setShowQuickActions(true);
         break;
     }
   };
@@ -158,73 +179,32 @@ export default function ChatbotPopup({ onClose }) {
             {/* Body */}
             {!minimized && (
               <div className="flex flex-col h-full relative">
-                {/* Welcome / Quick Actions */}
-                <motion.div 
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 }}
-                  className="px-4 pt-4 pb-2 border-b bg-white/50 backdrop-blur-sm"
-                >
-                  <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="text-green-700">
-                        <path d="M12 2v20M2 12h20" stroke="#16A34A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    </div>
-                    <div>
-                      <div className="text-sm font-semibold text-green-700">Welcome to DocEase</div>
-                      <div className="text-xs text-gray-600">How can I be of assistance today?</div>
-                    </div>
-                  </div>
-
-                  {/* Quick action buttons */}
-                  <motion.div 
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.4 }}
-                    className="mt-3 flex flex-wrap gap-2"
-                  >
-                    <button
-                      onClick={() => handleQuickAction('firstAid')}
-                      className="text-xs px-2 py-1 rounded bg-gray-100 hover:bg-gray-200 transition-colors"
-                    >
-                      First Aid Guidance
-                    </button>
-                    <button
-                      onClick={() => handleQuickAction('symptomChecker')}
-                      className="text-xs px-2 py-1 rounded bg-green-50 text-green-700 border border-green-100 hover:bg-green-100 transition-colors"
-                    >
-                      Symptoms Checker
-                    </button>
-                    <button
-                      onClick={() => handleQuickAction('specialist')}
-                      className="text-xs px-2 py-1 rounded bg-gray-100 hover:bg-gray-200 transition-colors"
-                    >
-                      Specialist Recommendation
-                    </button>
-                    <button
-                      onClick={() => handleQuickAction('medication')}
-                      className="text-xs px-2 py-1 rounded bg-gray-100 hover:bg-gray-200 transition-colors"
-                    >
-                      Medication Info
-                    </button>
-                    <button
-                      onClick={() => handleQuickAction('lab')}
-                      className="text-xs px-2 py-1 rounded bg-gray-100 hover:bg-gray-200 transition-colors"
-                    >
-                      Lab Test Explainer
-                    </button>
-                    <button
-                      onClick={() => handleQuickAction('talkDoctor')}
-                      className="text-xs px-2 py-1 rounded bg-gray-100 hover:bg-gray-200 transition-colors"
-                    >
-                      Talk to a Doctor
-                    </button>
-                  </motion.div>
-                </motion.div>
-
                 {/* Messages Container */}
                 <div className="flex-1 overflow-y-auto px-4 py-3 bg-white/50">
+                  {/* Welcome Message */}
+                  {showWelcome && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="mb-3"
+                    >
+                      <div className="inline-block p-2 rounded-lg bg-gray-100 text-gray-800">
+                        <div className="flex items-start gap-3">
+                          <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="text-green-700">
+                              <path d="M12 2v20M2 12h20" stroke="#16A34A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                          </div>
+                          <div>
+                            <div className="text-sm font-semibold text-green-700">Welcome to DocEase</div>
+                            <div className="text-xs text-gray-600">How can I be of assistance today?</div>
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {/* Chat Messages */}
                   {messages.map((message, index) => (
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
@@ -251,6 +231,32 @@ export default function ChatbotPopup({ onClose }) {
                       DocEase Bot is thinking...
                     </motion.div>
                   )}
+
+                  {/* Quick Actions after the last message */}
+                  {showQuickActions && messages.length > 0 && !isLoading && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="mt-4"
+                    >
+                      <div className="inline-block bg-gray-100 rounded-lg p-3 w-full">
+                        <div className="text-xs text-gray-600 mb-2">What would you like to do next?</div>
+                        <QuickActions onAction={handleQuickAction} />
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {/* Initial Quick Actions if no messages */}
+                  {showQuickActions && messages.length === 0 && !isLoading && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.4 }}
+                      className="mt-4"
+                    >
+                      <QuickActions onAction={handleQuickAction} />
+                    </motion.div>
+                  )}
                 </div>
 
                 {/* Input Container */}
@@ -269,6 +275,7 @@ export default function ChatbotPopup({ onClose }) {
                       setMessages((prev) => [...prev, { type: 'user', content: input }]);
                       setUserInput('');
                       setIsLoading(true);
+                      setShowQuickActions(false); // Hide quick actions while processing
 
                       try {
                         let response;
@@ -329,6 +336,8 @@ export default function ChatbotPopup({ onClose }) {
                         console.error('Request failed:', error);
                       } finally {
                         setIsLoading(false);
+                        // Re-show quick actions after a tiny delay for smooth animation
+                        setTimeout(() => setShowQuickActions(true), 220);
                       }
                     }}
                     className="flex gap-2"

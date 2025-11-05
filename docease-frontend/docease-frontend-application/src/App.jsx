@@ -5,6 +5,7 @@ import Features from './components/Features';
 import Footer from './components/Footer';
 import ChatbotPopup from './components/ChatbotPopup';
 import Pricing from './pages/Pricing';
+import DoctorSignupPage from './pages/Signup';
 import { useState } from 'react';
 
 export default function App() {
@@ -13,6 +14,17 @@ export default function App() {
   return (
     <>
       <Navbar />
+
+      {/* Chatbot popup is available globally */}
+      {chatVisible && <ChatbotPopup onClose={() => setChatVisible(false)} />}
+      {!chatVisible && (
+        <div className="fixed bottom-2 right-6 z-40">
+          <button onClick={() => setChatVisible(true)} title="Toggle Chatbot">
+            <img src="/logo.png" alt="DocEase Logo" className="h-15 w-12 hover:scale-105 transition-transform" />
+          </button>
+        </div>
+      )}
+
       <Routes>
         <Route
           path="/"
@@ -20,19 +32,14 @@ export default function App() {
             <>
               <Hero />
               <Features />
-              {chatVisible && <ChatbotPopup onClose={() => setChatVisible(false)} />}
-              {!chatVisible && (
-                <div className="fixed bottom-2 right-6 z-40">
-                  <button onClick={() => setChatVisible(true)} title="Toggle Chatbot">
-                    <img src="/logo.png" alt="DocEase Logo" className="h-15 w-12 hover:scale-105 transition-transform" />
-                  </button>
-                </div>
-              )}
             </>
           }
         />
         <Route path="/pricing" element={<Pricing />} />
+        <Route path="/signup/doctor" element={<DoctorSignupPage />} />
+        {/* Optional: redirect or 404 route can go here */}
       </Routes>
+
       <Footer />
     </>
   );
