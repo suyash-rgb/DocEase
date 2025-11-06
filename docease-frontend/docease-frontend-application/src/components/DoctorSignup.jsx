@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 // If you want the entrance animation, install framer-motion and uncomment lines below
 // import { motion } from 'framer-motion';
 
@@ -25,6 +26,9 @@ export default function DoctorSignup() {
     if (form.imageUrl) setImagePreview(form.imageUrl);
     else setImagePreview('');
   }, [form.imageUrl]);
+
+  // Doctor background image from Unsplash (royalty free)
+  const doctorBgUrl = 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80';
 
   const validators = useMemo(() => ({
     username: (v) => v.trim() !== '' || 'Username is required',
@@ -113,9 +117,19 @@ export default function DoctorSignup() {
   }
 
   return (
-    // Replace <div> with <motion.div> and set initial/animate props if using framer-motion
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-      <div className="w-full max-w-2xl">
+    <div className="relative min-h-screen flex items-center justify-center bg-gray-50 p-4 overflow-hidden">
+      {/* Background image with overlay */}
+      <div
+        className="absolute inset-0 z-0 bg-cover bg-center"
+        style={{
+          backgroundImage: `url('${doctorBgUrl}')`,
+          opacity: 0.18,
+          filter: 'blur(1px) saturate(1.1)',
+        }}
+        aria-hidden
+      />
+      <div className="absolute inset-0 z-10 bg-gradient-to-br from-white/80 to-green-50/60 pointer-events-none" />
+      <div className="relative z-20 w-full max-w-2xl">
         <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
           <div className="flex gap-6 p-6 md:p-8">
             {/* Left: Branding / Image Preview */}
@@ -364,7 +378,7 @@ export default function DoctorSignup() {
 
                   <div className="text-sm text-gray-600">
                     <span>Already have an account? </span>
-                    <a href="/login" className="text-green-700 hover:underline">Log in</a>
+                    <Link to="/login" className="text-green-700 hover:underline">Log in</Link>
                   </div>
                 </div>
               </form>

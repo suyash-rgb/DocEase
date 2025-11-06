@@ -5,23 +5,52 @@ export const formatBotResponse = (response) => {
 
   const blocks = [];
 
+  // ✅ First Aid info rendering
+  if (response.firstAid) {
+    const { tag, group, steps } = response.firstAid;
+    blocks.push(
+      <div key="firstAid" className="mb-4">
+        <h4 className="text-md font-semibold text-green-700 capitalize">
+          {tag}
+        </h4>
+        <p className="text-sm text-gray-700 mb-1">
+          <strong>Protocol:</strong> {group}
+        </p>
+        <p className="text-sm font-medium text-gray-800">Steps:</p>
+        <ul className="list-disc ml-5 text-sm text-gray-700">
+          {steps.map((step, idx) => (
+            <li key={`step-${idx}`}>{step}</li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
+
   // ✅ Medication info rendering
   if (response.medicines && typeof response.medicines === "object") {
     for (const [medName, medData] of Object.entries(response.medicines)) {
       blocks.push(
         <div key={medName} className="mb-4">
-          <h4 className="text-md font-semibold text-green-700 capitalize">{medName}</h4>
+          <h4 className="text-md font-semibold text-green-700 capitalize">
+            {medName}
+          </h4>
           <div className="ml-4">
             <p className="text-sm font-medium text-gray-800">Uses:</p>
             <p className="text-sm text-gray-700 mb-2">{medData.uses}</p>
 
             <p className="text-sm font-medium text-gray-800">Dosage:</p>
             <ul className="list-disc ml-5 text-sm text-gray-700">
-              <li><strong>Adults:</strong> {medData.dosage?.adults}</li>
-              <li><strong>Children:</strong> {medData.dosage?.kids}</li>
+              <li>
+                <strong>Adults:</strong> {medData.dosage?.adults}
+              </li>
+              <li>
+                <strong>Children:</strong> {medData.dosage?.kids}
+              </li>
             </ul>
 
-            <p className="text-sm font-medium text-gray-800 mt-2">Precautions:</p>
+            <p className="text-sm font-medium text-gray-800 mt-2">
+              Precautions:
+            </p>
             <p className="text-sm text-gray-700">{medData.precautions}</p>
           </div>
         </div>
@@ -34,11 +63,15 @@ export const formatBotResponse = (response) => {
     for (const [symptom, data] of Object.entries(response.symptoms)) {
       blocks.push(
         <div key={symptom} className="mb-4">
-          <h4 className="text-md font-semibold text-green-700 capitalize">{symptom}</h4>
+          <h4 className="text-md font-semibold text-green-700 capitalize">
+            {symptom}
+          </h4>
           <div className="ml-4">
             {Array.isArray(data.precautions) && data.precautions.length > 0 && (
               <>
-                <p className="text-sm font-medium text-gray-800">Precautions:</p>
+                <p className="text-sm font-medium text-gray-800">
+                  Precautions:
+                </p>
                 <ul className="list-disc ml-5 text-sm text-gray-700">
                   {data.precautions.map((item, idx) => (
                     <li key={`p-${symptom}-${idx}`}>{item}</li>
@@ -48,7 +81,9 @@ export const formatBotResponse = (response) => {
             )}
             {Array.isArray(data.remedies) && data.remedies.length > 0 && (
               <>
-                <p className="text-sm font-medium text-gray-800 mt-2">Remedies:</p>
+                <p className="text-sm font-medium text-gray-800 mt-2">
+                  Remedies:
+                </p>
                 <ul className="list-disc ml-5 text-sm text-gray-700">
                   {data.remedies.map((item, idx) => (
                     <li key={`r-${symptom}-${idx}`}>{item}</li>
@@ -65,7 +100,10 @@ export const formatBotResponse = (response) => {
   // ✅ Disclaimer
   if (response.disclaimer) {
     blocks.push(
-      <div key="disclaimer" className="mt-4 p-2 bg-yellow-50 border border-yellow-200 rounded-lg">
+      <div
+        key="disclaimer"
+        className="mt-4 p-2 bg-yellow-50 border border-yellow-200 rounded-lg"
+      >
         <p className="text-xs text-gray-600 italic">{response.disclaimer}</p>
       </div>
     );
@@ -79,7 +117,7 @@ export const formatBotResponse = (response) => {
           {response.prompt}
         </p>
       );
-    } else if (typeof response === 'string') {
+    } else if (typeof response === "string") {
       blocks.push(
         <p key="simple-message" className="text-sm text-gray-700">
           {response}

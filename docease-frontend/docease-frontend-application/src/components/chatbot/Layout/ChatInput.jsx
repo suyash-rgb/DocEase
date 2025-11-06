@@ -14,6 +14,8 @@ export default function ChatInput({
   const getPlaceholder = () => {
     if (!showInput) return 'Choose an option above to start';
     switch (expectedInputMode) {
+      case 'firstaid':
+        return 'Describe your emergency (e.g., burn, cut)';
       case 'medication':
         return 'Enter a medicine name (e.g., Parasafe)';
       case 'symptom':

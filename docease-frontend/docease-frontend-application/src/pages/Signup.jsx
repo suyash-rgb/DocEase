@@ -13,7 +13,7 @@ export default function DoctorSignupPage() {
 
         {/* Render the signup component (card handles its own layout) */}
         <DoctorSignup />
-      </section>
+      </section> 
     </main>
   );
 }

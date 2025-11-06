@@ -14,7 +14,7 @@ export default function Navbar() {
         <li><a href="#about">About</a></li>
         <li><a href="#contact">Contact Us</a></li>
         <li><a href="#login">Log In</a></li>
-        <li><a href="#signup">Sign Up</a></li>
+        <li><Link to="/signup-selection">Sign Up</Link></li>
       </ul>
     </nav>
   );

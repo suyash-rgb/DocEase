@@ -9,7 +9,7 @@ import WelcomeMessage from './chatbot/Messages/WelcomeMessage';
 import LoadingIndicator from './chatbot/Utils/LoadingIndicator';
 import Disclaimer from './chatbot/Utils/Disclaimer';
 import QuickActions from './QuickActions';
-import { getPrecautionsAndRemedies, getMedicationInfo } from '../services/aiService';
+import { getPrecautionsAndRemedies, getMedicationInfo, getFirstAidInfo } from '../services/aiService';
 
 export default function ChatbotPopup({ onClose }) {
   const [visible, setVisible] = useState(false);
@@ -59,15 +59,16 @@ export default function ChatbotPopup({ onClose }) {
 
     switch (action) {
       case 'firstAid':
-        pushBotMessage('Basic first aid: ensure safety, stop bleeding with pressure, immobilize fractures, call emergency services if severe.');
-        setShowInput(false);
-        setExpectedInputMode('none');
+        setShowInput(true);
+        setExpectedInputMode('firstAid');
+        pushBotMessage('Enter your emergency details (e.g., burn, cut)', 'firstaid');
+        setTimeout(() => inputRef.current?.focus(), 50);
         setTimeout(() => setShowQuickActions(true), 1000);
         break;
 
       case 'symptomChecker':
         pushBotMessage('Enter your symptoms (e.g., fever, cough)', 'symptom');
-        setShowInput(true);
+        setShowInput(true); 
         setTimeout(() => inputRef.current?.focus(), 50);
         break;
 
@@ -117,6 +118,8 @@ export default function ChatbotPopup({ onClose }) {
       let response;
       if (expectedInputMode === 'medication') {
         response = await handleMedicationRequest(input);
+      }else if (expectedInputMode === 'firstAid') {
+        response = await handleFirstAidRequest(input);
       } else {
         response = await handleSymptomRequest(input);
       }
@@ -162,7 +165,23 @@ export default function ChatbotPopup({ onClose }) {
     };
   };
 
-  const handleSymptomRequest = (input) => getPrecautionsAndRemedies(input);
+  const handleSymptomRequest = async (input) => await getPrecautionsAndRemedies(input);
+  
+  const handleFirstAidRequest = async (input) => {
+    const response = await getFirstAidInfo(input);
+    console.debug("[handleFirstAidRequest] response:", response);
+
+    return {
+      firstAid: {
+        tag: response.tag,
+        group: response.group,
+        steps: response.steps,
+      },
+      disclaimer:
+        "This is general first aid guidance. For emergencies, contact local medical services immediately.",
+    };
+  };
+
 
   return (
     <AnimatePresence>

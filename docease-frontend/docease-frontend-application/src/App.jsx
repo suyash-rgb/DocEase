@@ -5,8 +5,14 @@ import Features from './components/Features';
 import Footer from './components/Footer';
 import ChatbotPopup from './components/ChatbotPopup';
 import Pricing from './pages/Pricing';
+import UserRoleSelectionPage from './pages/UserRoleSelectionPage';
 import DoctorSignupPage from './pages/Signup';
+import PatientSignup from './components/PatientSignup';
+import PatientLogin from './components/PatientLogin';
+import LoginPage from './components/Login';
 import { useState } from 'react';
+import AdminSignup from './components/AdminSignup';
+import AdminLogin from './components/AdminLogin';
 
 export default function App() {
   const [chatVisible, setChatVisible] = useState(false);
@@ -36,7 +42,14 @@ export default function App() {
           }
         />
         <Route path="/pricing" element={<Pricing />} />
+        <Route path="/signup-selection" element={<UserRoleSelectionPage />} />
+        <Route path="/signup/admin" element={<AdminSignup />} />
+        <Route path="/login/admin" element={<AdminLogin />} />
         <Route path="/signup/doctor" element={<DoctorSignupPage />} />
+        <Route path="/signup/patient" element={<PatientSignup />} />
+        <Route path="/login/patient" element={<PatientLogin />} />
+        <Route path="/login" element={<LoginPage />} />
+        
         {/* Optional: redirect or 404 route can go here */}
       </Routes>
 

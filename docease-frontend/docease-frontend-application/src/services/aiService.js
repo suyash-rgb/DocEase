@@ -10,6 +10,20 @@ const aiServiceClient = axios.create({
     }
 });
 
+export const getFirstAidInfo = async (query) => {
+  try {
+    const response = await aiServiceClient.get('/first-aid', {
+      params: { q: query },
+    });
+    console.debug('[getFirstAidInfo] Query:', query);
+    return response.data;
+  } catch (error) {
+    console.error('[getFirstAidInfo] Error fetching first aid info:', error);
+    throw new Error('Unable to fetch first aid guidance at the moment.');
+  }
+};
+
+
 export const getPrecautionsAndRemedies = async (symptoms) => {
     try {
         const response = await aiServiceClient.post('/symptom-precautions-and-remedies/generate', {

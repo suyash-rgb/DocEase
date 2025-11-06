@@ -22,6 +22,6 @@ export default function ChatContainer({ children }) {
       <div className="relative z-10 flex flex-col h-full">
         {children}
       </div>
-    </motion.div>
+    </motion.div> 
   );
 }

@@ -1,46 +1,6 @@
-refactor(chatbot): enhance UI/UX and implement dynamic message handling
+feat(role-selection-page): add role-based signup/login flows for patients and hospital admins
 
-Layout & Visual Improvements:
-- Refactored ChatContainer for proper height calculation and scroll behavior
-- Improved spacing, padding, and backdrop styling for message flow
-- Added smooth transitions for quick actions and input visibility
-- Dynamically updated input placeholder based on selected quick action
-- Enhanced focus management for input field after action selection
-
-Message Handling:
-- Implemented expectedInputMode state to route user input to correct API
-- Added pushBotMessage helper to couple prompt and mode consistently
-- Integrated medication info API with proper formatting and rendering
-- Preserved native API response structure for medication (no symptom wrapping)
-- Updated BotMessage to support both symptoms and medicines formats
-- Added fallback rendering for unknown message shapes
-
-Component Structure:
-- Modularized chatbot into Layout, Messages, and Utils folders
-- Created reusable components: ChatHeader, ChatInput, BotMessage, UserMessage, WelcomeMessage, LoadingIndicator, Disclaimer
-- Improved prop management and component hierarchy for maintainability
-
-Features & Interactions:
-- Added dynamic placeholder hints inside input box based on mode
-- Implemented proper show/hide timing for quick actions and input field
-- Enhanced message flow for better conversational UX
-- Added handling for unimplemented features (e.g., specialist, talkDoctor)
-- Improved error boundaries and fallback responses
-
-Error Handling:
-- Added consistent error state and disclaimer rendering
-- Implemented fallback medication response when API returns empty
-- Enhanced error message display with visual styling
-- Added console logs for debugging and mode tracking
-
-Technical Improvements:
-- Improved state management with mode-driven input routing
-- Added cleanup logic in useEffect for visibility timer
-- Enhanced debugging with console.debug and console.error logs
-- Verified component lifecycle and prop flow
-
-Testing:
-- Verified medication info integration end-to-end
-- Tested symptom checker workflow with multiple inputs
-- Validated quick actions behavior and re-render timing
-- Confirmed error handling scenarios and fallback rendering
+- Created role selection page with cards for Admin, Doctor, and Patient
+- Implemented patient signup and login pages with full form fields
+- Added hospital admin signup and login pages with hospital-specific fields
+- Linked signup and login pages for smooth navigation
