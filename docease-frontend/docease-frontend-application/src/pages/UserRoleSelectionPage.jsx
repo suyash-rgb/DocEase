@@ -24,7 +24,7 @@ export default function UserRoleSelectionPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-4 py-8">
-      <h1 className="text-6xl font-bold text-gray-800 mb-6">Select Your Role</h1>
+      <h1 className="text-6xl font-bold text-gray-800 mb-6">Select Profile</h1>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl">
         {roles.map((role) => (
           <div

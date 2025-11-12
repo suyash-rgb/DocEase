@@ -1,6 +1,0 @@
-feat(role-selection-page): add role-based signup/login flows for patients and hospital admins
-
-- Created role selection page with cards for Admin, Doctor, and Patient
-- Implemented patient signup and login pages with full form fields
-- Added hospital admin signup and login pages with hospital-specific fields
-- Linked signup and login pages for smooth navigation
