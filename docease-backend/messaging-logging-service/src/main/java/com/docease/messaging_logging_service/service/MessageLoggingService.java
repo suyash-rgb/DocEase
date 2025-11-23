@@ -2,16 +2,16 @@ package com.docease.messaging_logging_service.service;
 
 import com.docease.messaging_logging_service.entity.MessageLog;
 import com.docease.messaging_logging_service.repository.MessagingLogsRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class MessageLoggingService {
 
-    private final MessagingLogsRepository messagingLogsRepository;
+    @Autowired
+    private  MessagingLogsRepository messagingLogsRepository;
 
-    public MessageLoggingService(MessagingLogsRepository messagingLogsRepository) {
-        this.messagingLogsRepository = messagingLogsRepository;
-    }
-
-    void logConversation(String input, String output){
+    public void logConversation(String input, String output){
         try{
             MessageLog log = new MessageLog(input, output);
             messagingLogsRepository.save(log);
