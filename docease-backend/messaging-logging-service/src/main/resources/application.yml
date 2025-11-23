@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: messaging-logging-service
+  mongodb:
+    uri: mongodb://localhost:27017/docease
+
+server:
+  port: 8084
+
+logging:
+  level:
+    com.docease.messagingloggingservice: INFO
+
+# === Eureka Service Discovery
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
