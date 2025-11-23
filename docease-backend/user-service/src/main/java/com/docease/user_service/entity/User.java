@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.persistence.Id;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Table(name = "users")
@@ -13,7 +14,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private Integer id;
+    private Integer userId;
 
     @Column(nullable = false)
     private String username;
@@ -43,8 +44,8 @@ public class User {
     public User() {
     }
 
-    public User(Integer id, String username, String email, String passwordHash, Role role, Boolean mfaEnabled, String mfaSecret, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.id = id;
+    public User(Integer userId, String username, String email, String passwordHash, Role role, Boolean mfaEnabled, String mfaSecret, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.userId = userId;
         this.username = username;
         this.email = email;
         this.passwordHash = passwordHash;
@@ -55,12 +56,12 @@ public class User {
         this.updatedAt = updatedAt;
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public String getUsername() {
@@ -125,5 +126,39 @@ public class User {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    // === Lifecycle ===
+    @PrePersist
+    protected void onCreate() {
+        createdAt = updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
+
+    // === equals(), hashCode(), toString() ===
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User user)) return false;
+        return Objects.equals(userId, user.userId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId=" + userId +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", role=" + (role != null ? role.getName() : "null") +
+                '}';
     }
 }

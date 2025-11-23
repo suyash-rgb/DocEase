@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.persistence.Id;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Entity
 @Table(name = "doctors")
@@ -16,17 +17,17 @@ public class Doctor {
     private Integer doctorId;
 
     @OneToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
 
     @Column(nullable = false)
     private String specialization;
 
     // CHANGE Double → BigDecimal
-    @Column(name = "consultation_fee", precision = 10, scale = 2, nullable = false)
+    @Column(name = "consultation_fee", precision = 10, scale = 2)
     private BigDecimal consultationFee = BigDecimal.ZERO;
 
-    @Column(name = "profile_description")
+    @Column(name = "profile_description", columnDefinition = "TEXT")
     private String profileDescription;
 
     private String phone;
@@ -113,5 +114,27 @@ public class Doctor {
 
     public void setMedicalLicense(String medicalLicense) {
         this.medicalLicense = medicalLicense;
+    }
+
+    // === equals(), hashCode(), toString() ===
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Doctor doctor)) return false;
+        return Objects.equals(doctorId, doctor.doctorId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(doctorId);
+    }
+
+    @Override
+    public String toString() {
+        return "Doctor{" +
+                "doctorId=" + doctorId +
+                ", userId=" + (user != null ? user.getUserId() : "null") +
+                ", specialization='" + specialization + '\'' +
+                '}';
     }
 }
