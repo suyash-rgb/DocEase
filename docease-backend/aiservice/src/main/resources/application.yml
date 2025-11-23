@@ -1,6 +1,7 @@
 spring:
   application:
     name: aiservice
+
   # === MongoDB ===
   data:
     mongodb:
@@ -23,6 +24,9 @@ spring:
         properties:
           hibernate:
             format_sql: true
+
+server:
+  port: 8088
 
 # === Eureka Service Discovery
 eureka:
