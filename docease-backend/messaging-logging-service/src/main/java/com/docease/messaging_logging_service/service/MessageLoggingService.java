@@ -8,14 +8,20 @@ import org.springframework.stereotype.Service;
 @Service
 public class MessageLoggingService {
 
-    @Autowired
-    private  MessagingLogsRepository messagingLogsRepository;
+    public final MessagingLogsRepository messagingLogsRepository;
+
+    public MessageLoggingService(MessagingLogsRepository messagingLogsRepository) {
+        this.messagingLogsRepository = messagingLogsRepository;
+    }
 
     public void logConversation(String input, String output){
         try{
             MessageLog log = new MessageLog(input, output);
+            System.out.println("Saving log...");
             messagingLogsRepository.save(log);
+            System.out.println("Log saved! ID = " + log.getId());
         } catch(Exception e){
+            e.printStackTrace();
             throw new RuntimeException("Failed to save conversation log", e);
         }
     }

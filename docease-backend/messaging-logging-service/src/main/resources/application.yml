@@ -1,8 +1,9 @@
 spring:
   application:
     name: messaging-logging-service
-  mongodb:
-    uri: mongodb://localhost:27017/docease
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/docease
 
 server:
   port: 8084

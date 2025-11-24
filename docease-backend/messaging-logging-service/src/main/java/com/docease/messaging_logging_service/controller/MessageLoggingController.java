@@ -12,11 +12,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/messaging-logging-service")
 public class MessageLoggingController {
 
-    @Autowired
-    private MessageLoggingService messageLoggingService;
+    private final MessageLoggingService messageLoggingService;
+
+    public MessageLoggingController(MessageLoggingService messageLoggingService) {
+        this.messageLoggingService = messageLoggingService;
+    }
 
     @PostMapping("/log-conversation")
     public void logConversation(@RequestBody LogRequest request) {
+        System.out.println("Repository in service: " + messageLoggingService.messagingLogsRepository);
         messageLoggingService.logConversation(request.input(), request.output());
     }
 
