@@ -46,4 +46,4 @@ gemini:
 # Logging endpoint — now safe
 app:
   logging:
-    endpoint: http://messaging-logging-service/api/logging/conversation
+    endpoint: http://messaging-logging-service/messaging-logging-service/log-conversation
