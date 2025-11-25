@@ -2,12 +2,12 @@ spring:
   application:
     name: aiservice
 
-  # === MongoDB ===
-  data:
-    mongodb:
-      uri: mongodb://localhost:27017/docease
+  # MongoDB (for local logs — you can remove later)
+#  data:
+#    mongodb:
+#      uri: mongodb://localhost:27017/docease
 
-  # === MySQL ===
+  # MySQL for FirstAid (unchanged — fine)
   datasource:
     firstaid:
       jdbc-url: jdbc:mysql://localhost:3306/aiservice_first_aid?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
@@ -15,38 +15,35 @@ spring:
       password: root
       driver-class-name: com.mysql.cj.jdbc.Driver
 
-    jpa:
-      firstaid:
+  jpa:
+    firstaid:
+      hibernate:
+        ddl-auto: validate
+      show-sql: true
+      database-platform: org.hibernate.dialect.MySQL8Dialect
+      properties:
         hibernate:
-          ddl-auto: validate
-        show-sql: true
-        database-platform: org.hibernate.dialect.MySQL8Dialect
-        properties:
-          hibernate:
-            format_sql: true
+          format_sql: true
 
 server:
   port: 8088
 
-# === Eureka Service Discovery
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761//eureka/
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    prefer-ip-address: true
 
-# --will add later
-#eureka:
-#  client:
-#    register-with-eureka: true
-#    fetch-registry: true
-
+# Gemini
 gemini:
   api:
     url: ${GEMINI_API_URL}
     key: ${GEMINI_API_KEY}
 
-
+# Logging endpoint — now safe
 app:
   logging:
     endpoint: http://messaging-logging-service/api/logging/conversation
-
