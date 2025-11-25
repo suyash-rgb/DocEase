@@ -1,15 +1,20 @@
 package com.docease.aiservice.service;
 
+import com.docease.aiservice.DTO.AvailableDoctorResponse;
+import com.docease.aiservice.DTO.SpecialistResponse;
 import com.docease.aiservice.DTO.SymptomRequest;
 import com.docease.aiservice.DTO.LogRequest;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -17,6 +22,9 @@ public class SpecialistSuggestionService {
 
     private final WebClient externalWebClient;           // For Gemini API
     private final WebClient.Builder internalWebClientBuilder; // For internal logging
+
+    @Autowired
+    private DoctorAvailabilityService doctorAvailabilityService;
 
     @Value("${gemini.api.url}")
     private String geminiApiUrl;
@@ -27,9 +35,9 @@ public class SpecialistSuggestionService {
     @Value("${app.logging.endpoint}")
     private String loggingUrl;
 
-
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    //constructor injection
     public SpecialistSuggestionService(
             @Qualifier("externalWebClientBuilder") WebClient.Builder externalBuilder,
             @Qualifier("internalWebClientBuilder") WebClient.Builder internalBuilder) {
@@ -37,10 +45,33 @@ public class SpecialistSuggestionService {
         this.internalWebClientBuilder = internalBuilder;
     }
 
-    public String suggestSpecialist(SymptomRequest symptomRequest) {
-        String prompt = buildPrompt(symptomRequest);
+    public SpecialistResponse suggestSpecialistDoctors(SymptomRequest request, String city) {
+        // 1. Get specialist from Gemini
+        String specialist = extractSpecialistFromGemini(request);
 
-        Map<String, Object> requestBody = Map.of(
+        // 2. Get real doctors from user-service
+        List<AvailableDoctorResponse> doctors = doctorAvailabilityService.getAvailableDoctors(
+                specialist,
+                city,
+                LocalDate.now().plusDays(1)
+        );
+
+        // 3. Async log
+        logConversationAsync(request.getSymptoms(), specialist);
+
+        // 4. Return full response
+        return new SpecialistResponse(specialist, city, doctors);
+    }
+
+    private String extractSpecialistFromGemini(SymptomRequest request) {
+        String prompt = """
+                Based on these symptoms: "%s"
+                Suggest ONLY ONE most appropriate medical specialist.
+                Respond in strict JSON: {"specialist": "Cardiologist"}
+                No explanation. Only JSON.
+                """.formatted(request.getSymptoms());
+
+        Map<String, Object> body = Map.of(
                 "contents", new Object[]{
                         Map.of("parts", new Object[]{
                                 Map.of("text", prompt)
@@ -48,21 +79,23 @@ public class SpecialistSuggestionService {
                 }
         );
 
-        // Call Gemini API
-        String rawResponse = externalWebClient.post()
+        String raw = externalWebClient.post()
                 .uri(geminiApiUrl + geminiApiKey)
                 .header("Content-Type", "application/json")
-                .bodyValue(requestBody)
+                .bodyValue(body)
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
 
-        String suggestion = extractResponseContent(rawResponse);
-
-        // ASYNC LOGGING — fire-and-forget
-        logConversationAsync(symptomRequest.getSymptoms(), suggestion);
-
-        return suggestion;
+        try {
+            JsonNode node = objectMapper.readTree(raw)
+                    .path("candidates").get(0)
+                    .path("content").path("parts").get(0).path("text");
+            String json = node.asText().replaceAll("```json|```", "").trim();
+            return objectMapper.readTree(json).path("specialist").asText();
+        } catch (Exception e) {
+            return "General Physician"; // fallback
+        }
     }
 
     private void logConversationAsync(String input, String output) {

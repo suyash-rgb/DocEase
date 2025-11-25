@@ -1,10 +1,9 @@
+// user-service → src/main/java/com/docease/user_service/entity/Doctor.java
 package com.docease.user_service.entity;
 
-
 import jakarta.persistence.*;
-import jakarta.persistence.Id;
-
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -23,7 +22,6 @@ public class Doctor {
     @Column(nullable = false)
     private String specialization;
 
-    // CHANGE Double → BigDecimal
     @Column(name = "consultation_fee", precision = 10, scale = 2)
     private BigDecimal consultationFee = BigDecimal.ZERO;
 
@@ -38,85 +36,75 @@ public class Doctor {
     @Column(name = "medical_license")
     private String medicalLicense;
 
-    public Doctor() {
-    }
+    // ======== NEW COLUMNS ADDED BELOW ========
 
-    public Doctor(Integer doctorId, User user, String specialization, BigDecimal consultationFee, String profileDescription, String phone, String imageUrl, String medicalLicense) {
-        this.doctorId = doctorId;
-        this.user = user;
-        this.specialization = specialization;
-        this.consultationFee = consultationFee;
-        this.profileDescription = profileDescription;
-        this.phone = phone;
-        this.imageUrl = imageUrl;
-        this.medicalLicense = medicalLicense;
-    }
+    @Column(nullable = false, length = 100)
+    private String city = "Mumbai";  // default city
 
-    public Integer getDoctorId() {
-        return doctorId;
-    }
+    @Column(name = "clinic_name", length = 255)
+    private String clinicName = "Private Clinic";
 
-    public void setDoctorId(Integer doctorId) {
-        this.doctorId = doctorId;
-    }
+    @Column()
+    private Double rating = 4.50;
 
-    public User getUser() {
-        return user;
-    }
+    @Column(name = "total_reviews")
+    private Integer totalReviews = 0;
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+    @Column(name = "experience_years")
+    private Integer experienceYears = 0;
 
-    public String getSpecialization() {
-        return specialization;
-    }
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<AppointmentSlot> appointmentSlots;
 
-    public void setSpecialization(String specialization) {
-        this.specialization = specialization;
-    }
+    public List<AppointmentSlot> getAppointmentSlots() { return appointmentSlots; }
+    public void setAppointmentSlots(List<AppointmentSlot> appointmentSlots) { this.appointmentSlots = appointmentSlots; }
 
-    public BigDecimal getConsultationFee() {
-        return consultationFee;
-    }
+    // =========================================
 
-    public void setConsultationFee(BigDecimal consultationFee) {
-        this.consultationFee = consultationFee;
-    }
+    public Doctor() {}
 
-    public String getProfileDescription() {
-        return profileDescription;
-    }
+    // Getters & Setters for new fields
+    public String getCity() { return city; }
+    public void setCity(String city) { this.city = city; }
 
-    public void setProfileDescription(String profileDescription) {
-        this.profileDescription = profileDescription;
-    }
+    public String getClinicName() { return clinicName; }
+    public void setClinicName(String clinicName) { this.clinicName = clinicName; }
 
-    public String getPhone() {
-        return phone;
-    }
+    public Double getRating() { return rating; }
+    public void setRating(Double rating) { this.rating = rating; }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
+    public Integer getTotalReviews() { return totalReviews; }
+    public void setTotalReviews(Integer totalReviews) { this.totalReviews = totalReviews; }
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
+    public Integer getExperienceYears() { return experienceYears; }
+    public void setExperienceYears(Integer experienceYears) { this.experienceYears = experienceYears; }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
+    // Existing getters/setters (keep all)
+    public Integer getDoctorId() { return doctorId; }
+    public void setDoctorId(Integer doctorId) { this.doctorId = doctorId; }
 
-    public String getMedicalLicense() {
-        return medicalLicense;
-    }
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
 
-    public void setMedicalLicense(String medicalLicense) {
-        this.medicalLicense = medicalLicense;
-    }
+    public String getSpecialization() { return specialization; }
+    public void setSpecialization(String specialization) { this.specialization = specialization; }
 
-    // === equals(), hashCode(), toString() ===
+    public BigDecimal getConsultationFee() { return consultationFee; }
+    public void setConsultationFee(BigDecimal consultationFee) { this.consultationFee = consultationFee; }
+
+    public String getProfileDescription() { return profileDescription; }
+    public void setProfileDescription(String profileDescription) { this.profileDescription = profileDescription; }
+
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
+
+    public String getImageUrl() { return imageUrl; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+
+    public String getMedicalLicense() { return medicalLicense; }
+    public void setMedicalLicense(String medicalLicense) { this.medicalLicense = medicalLicense; }
+
+    // equals, hashCode, toString
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -133,8 +121,12 @@ public class Doctor {
     public String toString() {
         return "Doctor{" +
                 "doctorId=" + doctorId +
-                ", userId=" + (user != null ? user.getUserId() : "null") +
+                ", name='Dr. " + (user != null ? user.getUsername() : "N/A") + '\'' +
                 ", specialization='" + specialization + '\'' +
+                ", city='" + city + '\'' +
+                ", clinicName='" + clinicName + '\'' +
+                ", fee=" + consultationFee +
+                ", rating=" + rating +
                 '}';
     }
 }
