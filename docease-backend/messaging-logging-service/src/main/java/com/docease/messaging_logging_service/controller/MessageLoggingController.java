@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/messaging-logging-service")
+@RequestMapping("/api/logging")
 public class MessageLoggingController {
 
     private final MessageLoggingService messageLoggingService;
@@ -18,7 +18,7 @@ public class MessageLoggingController {
         this.messageLoggingService = messageLoggingService;
     }
 
-    @PostMapping("/log-conversation")
+    @PostMapping("/conversation")
     public void logConversation(@RequestBody LogRequest request) {
         System.out.println("Repository in service: " + messageLoggingService.messagingLogsRepository);
         messageLoggingService.logConversation(request.input(), request.output());

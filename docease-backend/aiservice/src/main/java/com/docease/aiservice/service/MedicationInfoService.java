@@ -1,19 +1,22 @@
 package com.docease.aiservice.service;
 
 import com.docease.aiservice.DTO.MedicineRequest;
+import com.docease.aiservice.DTO.LogRequest;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.util.Map;
 
 @Service
 public class MedicationInfoService {
 
-    private final WebClient webClient;
-    private final MessageLoggingService messageLoggingService;
+    private final WebClient externalWebClient;           // For Gemini API
+    private final WebClient.Builder internalWebClientBuilder; // For internal logging service
 
     @Value("${gemini.api.url}")
     private String geminiApiUrl;
@@ -21,16 +24,21 @@ public class MedicationInfoService {
     @Value("${gemini.api.key}")
     private String geminiApiKey;
 
-    public MedicationInfoService(WebClient.Builder webClientBuilder, MessageLoggingService messageLoggingService) {
-        this.webClient = webClientBuilder.build();
-        this.messageLoggingService = messageLoggingService;
+    @Value("${app.logging.endpoint}")
+    private String loggingUrl;
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
+    public MedicationInfoService(
+            @Qualifier("externalWebClientBuilder") WebClient.Builder externalBuilder,
+            @Qualifier("internalWebClientBuilder") WebClient.Builder internalBuilder) {
+        this.externalWebClient = externalBuilder.build();
+        this.internalWebClientBuilder = internalBuilder;
     }
 
     public String getMedicationInfo(MedicineRequest medicineRequest) {
-        // Build the prompt
         String prompt = buildPrompt(medicineRequest);
 
-        // Craft a request
         Map<String, Object> requestBody = Map.of(
                 "contents", new Object[]{
                         Map.of("parts", new Object[]{
@@ -39,8 +47,8 @@ public class MedicationInfoService {
                 }
         );
 
-        // Do request and get response
-        String response = webClient.post()
+        // Call Gemini API
+        String rawResponse = externalWebClient.post()
                 .uri(geminiApiUrl + geminiApiKey)
                 .header("Content-Type", "application/json")
                 .bodyValue(requestBody)
@@ -48,40 +56,83 @@ public class MedicationInfoService {
                 .bodyToMono(String.class)
                 .block();
 
-        // Extract response
-        String info = extractResponseContent(response);
+        String info = extractResponseContent(rawResponse);
 
-        // Log the conversation
-        messageLoggingService.logConversation(medicineRequest.getMedicines(), info);
+        // LOG ASYNC — fire-and-forget to centralized logging service
+        logConversationAsync(medicineRequest.getMedicines(), info);
 
         return info;
     }
 
+    private void logConversationAsync(String input, String output) {
+        LogRequest logRequest = new LogRequest(
+                "Medication info request: " + (input != null ? input : "N/A"),
+                output != null ? output : "No response generated"
+        );
+
+        internalWebClientBuilder.build()
+                .post()
+                .uri(loggingUrl)
+                .header("Content-Type", "application/json")
+                .bodyValue(logRequest)
+                .retrieve()
+                .bodyToMono(Void.class)
+                .onErrorResume(throwable -> {
+                    System.err.println("Failed to log medication query: " + throwable.getMessage());
+                    return Mono.empty();
+                })
+                .subscribe(); // Fire-and-forget — never blocks user
+    }
+
     private String extractResponseContent(String response) {
+        if (response == null || response.isBlank()) {
+            return "{\"error\": \"No response from AI model.\"}";
+        }
+
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode rootNode = mapper.readTree(response);
-            String content = rootNode.path("candidates")
+            JsonNode rootNode = objectMapper.readTree(response);
+            JsonNode textNode = rootNode.path("candidates")
                     .get(0)
                     .path("content")
                     .path("parts")
                     .get(0)
-                    .path("text")
-                    .asText();
+                    .path("text");
 
-            // Remove Markdown code fences and trim whitespace
-            content = content.replaceAll("^```json\\n|\\n```$", "").trim();
-            return content;
+            String text = textNode.asText("AI response parsing failed.");
+
+            // Remove markdown code blocks if present
+            return text.replaceAll("^```json\\n|\\n```$", "")
+                    .replaceAll("^```\\n|\\n```$", "")
+                    .trim();
         } catch (Exception e) {
-            return "{\"error\": \"Error processing request: " + e.getMessage() + "\"}";
+            return "{\"error\": \"Failed to parse medication info: " + e.getMessage() + "\"}";
         }
     }
 
     private String buildPrompt(MedicineRequest medicineRequest) {
-        StringBuilder prompt = new StringBuilder();
-        prompt.append("Generate a concise JSON response with information for the following medicines: ")
-                .append(medicineRequest.getMedicines())
-                .append(". For each medicine, include: 'uses': string describing what it's used for, 'dosage': {'kids': string, 'adults': string}, 'precautions': string describing who should consult a doctor or avoid it. Structure as JSON: {\"medicines\": {\"medicine1\": {\"uses\": \"\", \"dosage\": {\"kids\": \"\", \"adults\": \"\"}, \"precautions\": \"\"}}} Keep the response under 200 words.");
-        return prompt.toString();
+        return """
+                Provide accurate, concise information for the following medicine(s): %s
+                
+                For each medicine, return a JSON object with:
+                - "uses": main medical uses
+                - "dosage": { "adults": "...", "children": "..." }
+                - "side_effects": common ones
+                - "precautions": who should avoid or consult doctor
+                - "warning": any serious risks
+                
+                Example format:
+                {
+                  "medicines": {
+                    "Paracetamol": {
+                      "uses": "Pain relief and fever reduction",
+                      "dosage": { "adults": "500-1000mg every 4-6 hours", "children": "10-15mg/kg every 6 hours" },
+                      "side_effects": "Rare liver damage with overdose",
+                      "precautions": "Avoid alcohol, do not exceed 4g/day",
+                      "warning": "Overdose can cause liver failure"
+                    }
+                  }
+                }
+                Respond ONLY in valid JSON. Keep under 250 words.
+                """.formatted(medicineRequest.getMedicines());
     }
 }
