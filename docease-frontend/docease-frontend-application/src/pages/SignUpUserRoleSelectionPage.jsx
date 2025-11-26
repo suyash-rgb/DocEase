@@ -17,7 +17,7 @@ export default function UserRoleSelectionPage() {
     },
     {
       label: 'Patient',
-      description: 'Book appointments, view prescriptions, and access health records.',
+      description: 'Book appointments, view prescriptions, and access your health records.',
       route: '/signup/patient',
     },
   ];

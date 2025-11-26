@@ -5,7 +5,7 @@ import Features from './components/Features';
 import Footer from './components/Footer';
 import ChatbotPopup from './components/ChatbotPopup';
 import Pricing from './pages/Pricing';
-import UserRoleSelectionPage from './pages/UserRoleSelectionPage';
+import UserRoleSelectionPage from './pages/SignUpUserRoleSelectionPage';
 import DoctorSignupPage from './pages/Signup';
 import PatientSignup from './components/PatientSignup';
 import PatientLogin from './components/PatientLogin';
@@ -13,6 +13,11 @@ import LoginPage from './components/Login';
 import { useState } from 'react';
 import AdminSignup from './components/AdminSignup';
 import AdminLogin from './components/AdminLogin';
+import PrivacyPolicy from './pages/PolicyPage';
+import HospitalCreatePage from './pages/HospitalCreatePage';
+import AddDoctorPage from './pages/AddDoctorPage';
+import HospitalDoctorsPage from './pages/HospitalDoctorsPage';
+
 
 export default function App() {
   const [chatVisible, setChatVisible] = useState(false);
@@ -49,6 +54,11 @@ export default function App() {
         <Route path="/signup/patient" element={<PatientSignup />} />
         <Route path="/login/patient" element={<PatientLogin />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/privacy" element={<PrivacyPolicy />} />
+        <Route path="/hospitals/create" element={<HospitalCreatePage />} />
+        <Route path="/hospitals/add-doctor" element={<AddDoctorPage />} />
+        <Route path="/hospitals/:id/doctors" element={<HospitalDoctorsPage />} />
+
         
         {/* Optional: redirect or 404 route can go here */}
       </Routes>

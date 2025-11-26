@@ -8,7 +8,7 @@ export default function PrivacyPolicy() {
 
         <section className="mb-6">
           <p>
-            This Privacy Policy explains how <strong>DocEase</strong> collects, uses, and protects your personal
+            This page explains how <strong>DocEase</strong> collects, uses, and protects your personal
             information when you use our platform. By accessing or using DocEase, you agree to the terms outlined
             below.
           </p>
