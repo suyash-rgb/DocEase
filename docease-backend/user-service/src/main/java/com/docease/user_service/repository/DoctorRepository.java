@@ -13,7 +13,7 @@ public interface DoctorRepository extends JpaRepository<Doctor, Integer> {
 
     @Query(value = """
     SELECT 
-        d.doctor_id AS doctorId,
+        CAST(d.doctor_id AS SIGNED) AS doctorId,
         CONCAT('Dr. ', u.username) AS name,
         d.specialization AS specialization,
         COALESCE(d.clinic_name, 'Private Clinic') AS clinicName,

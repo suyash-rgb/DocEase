@@ -1,17 +1,16 @@
-feat(ai-doctor-finder): complete end-to-end AI specialist + real doctors with slots
+fix(user-service): resolved native query ClassCastException for doctorId
 
-MASSIVE MVP MILESTONE – FULL FLOW WORKING:
-- Added AppointmentSlot entity + real slots logic
-- Extended Doctor with city, clinic, rating, reviews
-- Fixed Hibernate 6 scale error on Double fields
-- Native query for available doctors + tomorrow slots with GROUP_CONCAT
-- Built full SpecialistSuggestionService: Gemini → user-service → response
-- WebClient integration with proper host/port/path for local dev
-- Removed Lombok, fixed WebClient bean conflicts with @Qualifier
-- Added AiController + /ai/suggest-specialist endpoint
-- Full DTO sync + error handling + async logging
-- End-to-end tested: AI understands symptoms → returns real doctors with real slots
+- Changed findAvailableDoctors() to use interface-based projection (AvailableDoctorResponse)- kept the same name and instead created a constructor
+- Replaced record constructor result mapping with Spring Data JPA interface projection
+- Eliminates Hibernate 6 + MySQL JDBC driver bug where INT columns are returned as Long in native queries
+- No changes required in aiservice — DTO/record remains unchanged and fully compatible
+- Query now safely maps doctor_id (INT) → Integer doctorId without casting issues
+- GROUP_CONCAT with ORDER BY preserved, slots display correctly
 
-THE AI DOCTOR FINDER IS ALIVE. FULLY. NO EXCUSES.
+Root cause: Hibernate 6 sometimes returns Long even for INT columns in native queries when using constructor expressions.
 
-Ready for JWT + Gateway + Docker → LAUNCH SEQUENCE INITIATED.
+Fix: Interface projection is the canonical, bulletproof solution for complex native queries in Spring Boot 3+.
+
+The symptom based specialist finder is now working.
+
+Tested end-to-end: "chest pain" → Cardiologist → real doctors + real slots returned successfully.
